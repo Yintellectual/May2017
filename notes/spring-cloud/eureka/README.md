@@ -25,3 +25,7 @@ com.netflix.appinfo.InstanceInfo
 	getHostName()
 	getPort()
 
+	
+Once hostname and port is obvious, if Restful server it is, then restTemplate or eureka-feign can be used to retieve data. 
+
+About Eureka-feign, see another topic under the name.
