@@ -1,0 +1,13 @@
+
+*.class
+
+.DS_Store
+
+boiler_reg.dat
+
+deviceagent.ini
+
+deviceagent.log
+
+.docker_temp_294940351
+/target/
