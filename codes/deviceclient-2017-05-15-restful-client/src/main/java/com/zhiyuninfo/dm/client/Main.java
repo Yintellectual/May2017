@@ -1,7 +1,7 @@
 package com.zhiyuninfo.dm.client;
 
 import com.zhiyuninfo.utility.service.ServiceSettings;
-import com.zhiyuninfo.debug.*;
+import com.zhiyuninfo.debug.DebugRestfulClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

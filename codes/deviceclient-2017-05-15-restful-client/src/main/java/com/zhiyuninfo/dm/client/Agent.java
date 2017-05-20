@@ -278,7 +278,7 @@ public abstract class Agent extends Thread {
 				if(sleepTime>0){
 					Thread.sleep(sleepTime);
 				}
-				logger.info("Properties:" + this.properties);
+				logger.info("Properties:" + this.agentProperties);
 				invokeDuration=System.currentTimeMillis();
 				this.processOneRound();
 				invokeDuration=System.currentTimeMillis()-invokeDuration;

@@ -64,11 +64,14 @@ public class DebugRestfulClient{
 	
 	public void debugDeviceTypes(String...args){
 			String url="";
+			
 			for(String arg:args){
 				url+=arg;
 			}
 			
 			try{
+				
+				System.out.println("url = " + url);
 			ResponseEntity<String> response = restTemplate.exchange(
 					url,
 					HttpMethod.GET, 
@@ -76,6 +79,7 @@ public class DebugRestfulClient{
 					String.class);
 			System.out.println(response.getBody());
 			}catch(HttpClientErrorException e){
+			
 			ResponseEntity<String> response = restTemplate.exchange(
 					url,
 					HttpMethod.POST, 

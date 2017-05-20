@@ -14,5 +14,10 @@
 7. to run this project, 
 
 		mvn clean package
+		
+		java -jar target\deviceclient-0.1-jar-with-dependencies.jar http:\\localhost:9091\agents\settings
+		
+8. to curl deviceservice, use
 
-		java -jar target/deviceclient-0.1.jar -host http://zhiyuninfo.com:9091
+		curl --header "Authorization: Basic ZGV2aWNlY2xpZW50OnpoaXl1bjg4ODg4OA==" localhost:9091/agents/settings
+		
