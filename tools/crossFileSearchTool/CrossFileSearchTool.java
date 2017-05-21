@@ -2,15 +2,32 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
+
 public class CrossFileSearchTool{
 	
 	public static void main(String ... args)throws Exception{
 			
-		Path start = Paths.get("C:","SpringWorkSpace","zhiyuninfo");
+		Path path1 = Paths.get("C:","SpringWorkSpace","zhiyuninfo","deviceclient");
+		Path path2 = Paths.get("C:","SpringWorkSpace","zhiyuninfo","deviceservice");
+		
+		
+		
+		searchDirectory(path2, "@RequestMapping").stream().forEach(System.out::println);
+		searchDirectory(path1, "restTemplate").stream().forEach(System.out::println);
 		
 		
 		
 		
+
+		
+	}
+	
+	private static List<String> searchDirectory(Path start, String targetString)throws Exception{
+			
+		final String TARGET_STRING_IN_LOWER_CASE = targetString.toLowerCase();
+	
+	
+	return 
 		Files.walk(start, FileVisitOption.FOLLOW_LINKS).filter(path->(!Files.isDirectory(path,LinkOption.NOFOLLOW_LINKS))).map(path-> {
 		
 			try{
@@ -22,13 +39,11 @@ public class CrossFileSearchTool{
 			
 			
 		})
-		
 		.flatMap(list->list.stream())
 		//.parallel()
-		.filter(str->str.toLowerCase().contains("change the heart beat rate from"))
+		.filter(str->str.toLowerCase().contains(TARGET_STRING_IN_LOWER_CASE))
 		.filter(str->!(str.trim().isEmpty()))
 		.filter(str-> str!=null)
-		.forEach(System.out::println);
-		
+		.collect(Collectors.toList());
 	}
 }
