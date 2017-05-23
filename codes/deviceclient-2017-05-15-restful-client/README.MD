@@ -7,7 +7,7 @@
 
 4. http://hotcloud.tech:8080/login?from=%2F, account is test:test. This resource is about Jenkins
 
-5. zhiyuninfo.com/serviceportal-0.1 is a web view of the official deviceservice, account is admin:day2cloud
+5. http://zhiyuninfo.com/serviceportal-0.1 is a web view of the official deviceservice, account is admin:day2cloud
 
 6. official deviceservice url is :http://zhiyuninfo.com:9091
 
