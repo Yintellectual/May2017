@@ -24,43 +24,76 @@ The design of such an project should be made in UML. The development should rest
 Timetable（total 12 hours）: 
 
 10
-{
-	1 hour: Reviwement of Spring Data and setting up service application
-}
+
+	{
+
+		1 hour: Reviwement of Spring Data and setting up service application
+
+	}
+
 11
-{
-	1 hour: read uml introduction and leaving notes
-}
+
+	{
+		
+		1 hour: read uml introduction and leaving notes
+
+	}
+
 12
-{
-	1 hour: POC project design
-}
+
+	{
+		
+		1 hour: POC project design
+	
+	}
 
 1: Lunch
+
 //
+
 2
-{
-	2 hour: test-driven selectively-updatable-repository development
-}
+
+	{
+		
+		2 hour: test-driven selectively-updatable-repository development
+	
+	}
+
 4
-{
-	1 hour: setting up client application and communicate service through restful api
-}
+
+	{
+		
+		1 hour: setting up client application and communicate service through restful api
+	
+	}
+
 5: Refreshment and rest 
+
 //
+
 6
+
 //
+
 7: Coffee
-{
-	1 hour: read about concepts from rabbitMQ 
-}
-{
-	1 hour: implement inter-application communicate through rabbitMQ
-}
+
+	{
+		
+		1 hour: read about concepts from rabbitMQ 
+
+	}
+
+	{
+
+		1 hour: implement inter-application communicate through rabbitMQ
+	
+	}
 9
 
 10:Dinner
+
 //
 
 Works:
+
 count: 8 hours in total
