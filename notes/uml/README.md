@@ -22,7 +22,8 @@ Online tool:
 
 1. use case diagrams
 
-	A use case diagrams shows system responsibilities(In Oval), system users(custom drawing) and the mapping from users to system responsibilities 
+	A use case diagrams shows system responsibilities(In Oval), 
+	system users(custom drawing) and the mapping from users to system responsibilities 
 
 2. class
 
@@ -47,8 +48,8 @@ Online tool:
 		
 		the horizontal dimension shows classes, start from the left
 		
-		The work flow is now a sequence of calls from class to class. Each call is represented by an concrete arrow from the sender to the 
-		receiver, and the return value is optionally represented by a dotted arrow of backward direction.
+		The work flow is now a sequence of calls from class to class. Each call is represented by an concrete arrow from the 
+		sender to the receiver, and the return value is optionally represented by a dotted arrow of backward direction.
 
 4. statechart
 

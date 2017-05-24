@@ -11,7 +11,6 @@
 
 		http://docs.spring.io/spring-data/data-jpa/docs/current/reference/html/#jpa.modifying-queries
 	
-
 4. read
 
 		uml from IBM, saved on the phone
@@ -94,3 +93,34 @@ Authentication
 UI
 
 Now, lets get started!
+
+sample site:
+	Best
+	http://crm.xtcrm.com/xcrm/desktop/?mdsid=0hc70c7vaskhdn8h1iniu8u025
+	http://demo.e.ikcrm.com/experience?secure_token=XcuQjGDH%2BU9TTxX3un0iYgaPWqivPDaqbwZu63CZ46U%3D
+	Worst
+
+Today there still be sometime to do the real D&D works:
+(6 hours in total)
+4
+
+	{2 hour: Design the system in uml diagrams}
+
+6
+
+	{1 hour: Setting up skeleton projects with working restTemplate, database, and rabbitmq client}
+
+
+7
+
+	{1 hour: Reviewing Test-Driven Development Concepts}
+
+8
+
+	{1 hour: CustomerService development}
+
+9
+
+	{1 hour: SalesmanService development}
+
+10
