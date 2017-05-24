@@ -6,4 +6,8 @@ https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html
 	mvn install:install-file -Dfile=<path-to-file> -DgroupId=<group-id> \
 	-DartifactId=<artifact-id> -Dversion=<version> -Dpackaging=<packaging>
 	
-	
+
+
+Providing port in command line
+
+	mvn spring-boot:run -Drun.jvmArguments='-Dserver.port=8081'
