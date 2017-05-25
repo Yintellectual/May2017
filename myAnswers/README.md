@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/42733163/example-for-domainevents-and-afterdomaineventspublication/44176258#44176258

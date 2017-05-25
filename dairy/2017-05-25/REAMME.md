@@ -36,7 +36,7 @@ I got about 12 hours today.
 
 17
 
-
+	{Learn more about Java Data}
 
 //18
 //
@@ -48,7 +48,7 @@ I got about 12 hours today.
 
 20
 
-
+	{revisit UML}
 
 21
 
