@@ -44,16 +44,16 @@ I got about 12 hours today.
 //
 19
 
-	{revisit the sample CRM}
+	{Light reading over the Spring Data Jpa reference}
 
 20
 
-	{revisit UML}
-
+	{Light reading over the Spring Data Jpa reference}
+	
 21
 
-
-
+	{Light reading over the Spring Data Jpa reference}
+	
 22
 
 
