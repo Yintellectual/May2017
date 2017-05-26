@@ -271,6 +271,16 @@ Part 4. Extensions:
 	4. Legacy Web Support
 	
 
+Part 5. Things that are hard to explain
 
+	1. @Transactional
+			
+		In your custom repository interface, CRUD methods that are derived from method names are @Transactional by default, 
+		while @Query methods are not. Generally speaking, manually mark @Transactional to @Query methods are necessary. 
+		
+		However, if a @Query method is merely doing select, then no transaction is required, thus @Transactional would not be necessary.
+		
+		
+	
 	
 	
