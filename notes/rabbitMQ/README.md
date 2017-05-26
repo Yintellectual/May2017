@@ -1,9 +1,14 @@
+web UI:
+
+	http://localhost:15672/#/ 
+
+
 1. RabbitMQ is a Message Broker  
 
 2. Message broker helps managing the complicity when many micro-applications couples with each other. 
 
 3. Message broker helps applications using different technologies work together
-
+	
 4. Message broker provides scalability by reduce the complicity of communication in both message provider and consumer
 
 5. Message broker is event driven
@@ -53,4 +58,13 @@
 	
 	Consuming: waiting & receiving message
 
+10. Work Queue:
+
+	10.1 Work Queue is for parallelize task execution with many worker clients. 
+	
+	10.2 Message Acknowledgement is to prevent losing tasks
+	
+	10.3 Message Durability
+	
+	10.4 Fair dispatch
 	

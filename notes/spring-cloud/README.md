@@ -1,3 +1,11 @@
+**** 2017-05-26
+Fetch application properties:
+
+	@org.springframework.beans.factory.annotation.Value("${server.port}")
+
+set port in "application.properties": 
+
+	server.port=8080
 
 **** 2017-05-23
 

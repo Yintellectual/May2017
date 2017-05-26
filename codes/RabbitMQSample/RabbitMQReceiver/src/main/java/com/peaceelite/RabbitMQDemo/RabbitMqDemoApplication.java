@@ -16,31 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
-@Component
-@Configuration
-public class RabbitMQProducerConfig{
+@SpringBootApplication
+public class RabbitMqDemoApplication {
 	
-	private RabbitMQConsumerConfig rabbitMQConsumerConfig;
-	
-	@Value("${queueName}")
-	String queueName;
-	
-	@Bean
-    Queue queue() {
-        return new Queue(queueName, false);
-    }
-	
-	@Bean
-    TopicExchange exchange() {
-        return new TopicExchange("spring-boot-exchange");
-    }
-	
-	@Bean
-	Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(queueName);
-    }
-	
-	
+
+	public static void main(String[] args) {
+		SpringApplication.run(RabbitMqDemoApplication.class, args);
+	}
+		
 }

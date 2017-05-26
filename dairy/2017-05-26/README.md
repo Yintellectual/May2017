@@ -28,9 +28,11 @@ java data, and make progress in my CRM system.
 
 	{Lomber exploration}
 
+	{RabbitMQ: Worker Queues}
+
 4
 
-	{RabbitMQ: the second exchange type other than direct exchange}
+	{RabbitMQ: Sample Worker Queues with codes}
 
 5//Dinner
 //

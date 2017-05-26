@@ -16,15 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 @SpringBootApplication
 public class RabbitMqDemoApplication {
 	
-    final static String queueName = "spring-boot";
+	
+	@Value("${queueName}")
+	String queueName;
 
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-	@Autowired
-	private Receiver receiver;
 	@Autowired
 	private ConfigurableApplicationContext context;
 	
@@ -38,7 +39,7 @@ public class RabbitMqDemoApplication {
 		SpringApplication.run(RabbitMqDemoApplication.class, args);
 	}
 	
-	
+	/*
 	@Bean
     SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
             MessageListenerAdapter listenerAdapter) {
@@ -47,17 +48,12 @@ public class RabbitMqDemoApplication {
         container.setQueueNames(queueName);
         container.setMessageListener(listenerAdapter);
         return container;
-    }
+    }*/
 
 	
-    @Bean
-    MessageListenerAdapter listenerAdapter(Receiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessage");
-    }
-
 	
 	@Bean
-	public CommandLineRunner run(RabbitTemplate rabbitTemplate, Receiver receiver, ConfigurableApplicationContext context) throws Exception {
+	public CommandLineRunner run(RabbitTemplate rabbitTemplate, ConfigurableApplicationContext context) throws Exception {
 		return args -> {
 			for(String arg:args){
 				System.out.println("\n\n\n\n"+arg+"\n\n\n\n");
@@ -74,13 +70,7 @@ public class RabbitMqDemoApplication {
 				
 				}
 			}else if (args[0].equals("receiver")){
-				
-				
-				
 			}
-			
-	
 		};
 	}
-	
 }
