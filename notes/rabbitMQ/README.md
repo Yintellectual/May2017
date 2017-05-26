@@ -68,3 +68,5 @@ web UI:
 	
 	10.4 Fair dispatch
 	
+	Basically, if multiple receivers are registered with the same queue, then the messages will be distributed fairly.
+	This kind of queue is called a work queue. 
