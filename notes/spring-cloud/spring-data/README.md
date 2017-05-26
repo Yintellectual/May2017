@@ -34,6 +34,7 @@ To be find out:
 			"5.9. Auditing"
 			
 			"5.10. JPA Auditing"
+			
 	5. "6. Miscellaneous"
 	
 The most amazing thing of Java Data is providing a "repository" layer. The repository layer consists of some interfaces.
