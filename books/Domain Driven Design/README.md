@@ -103,5 +103,5 @@ Continue reading from "Shipping Operations and Routes"
 
 It is necessary to have a diagram of domain models when discussing about the software system, especially with non-programmers. 
 In such a diagram, both entities and methods should be well abstracted into fictional terms.  The purpose is to provide concise 
-and precise vocabulary to communicate. However, this vocabulary should be used in domain modeling as well as coding. 
+and precise vocabulary for communication. However, this vocabulary should be used in domain modeling as well as coding. 
 
