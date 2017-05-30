@@ -1,5 +1,7 @@
 Domian Driven Design, by Eric Evans
 
+bookmark:
+
 Part I Putting the domain model to work. ?"domain model"
 
 	Chapter one: Crunching Knowledge ?"Crunching"
