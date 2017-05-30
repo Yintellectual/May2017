@@ -1,3 +1,22 @@
+Two microapplications are to be created. The customer-server will hold all the information of customers, including a list of 
+requirementProfiles held by each customer. The requriement-server works the same way. Add these two servers up, and I can have a 
+UI to add/remove/edit customer information with their requirements. 
+
+The software should have components:
+
+//	1. authentication module with login/logout page
+	
+//	2. user infomation module
+	
+//	3. Message pushing module
+	
+//	4. charts 
+	
+	5. data store, form submit and detail lists.
+	
+	
+------------------------------
+
 Our business is to provide some product that fulfills some requirments of the people. 
 
 We target at such a set of requirements because it is profitable. Our price comes from the customer value added by fulfilling the
@@ -46,8 +65,7 @@ An activity may be asking about the requirement, making an offer, and collecting
 
 
 Our CRMs serves both the salesmen and the manager of the salesman. The salesmen use our CRMs to record his activities. Our manager use
-our CRMs to see the records of his salesman. The records can be valuable to the salesmen too because it may reveal statistics over customers. 
-
+our CRMs to see the records of his salesman. The records can be valuable to the salesmen too because it may reveal statistics over customers.
 
 
 
