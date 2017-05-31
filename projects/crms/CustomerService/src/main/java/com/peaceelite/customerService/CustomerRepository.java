@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.repository.RepositoryDefinition;
 
-
 @RepositoryRestResource
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
 	
@@ -20,6 +19,5 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 	@Modifying//which means we are modifying an existing row, and only part of the information is necessary
 	@Transactional
 	@Query("update Customer customer set customer.name = :newName where customer.name = :oldName")
-	int updateName(@Param("oldName") String oldName, @Param("newName") String newName);
-
+	int updateName(@Param("oldName") String oldName, @Param("newName") String newName);	
 }

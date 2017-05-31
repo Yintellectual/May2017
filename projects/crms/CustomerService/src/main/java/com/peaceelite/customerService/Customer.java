@@ -1,7 +1,7 @@
 package com.peaceelite.customerService;
 
 import com.peaceelite.pojoProfile.CustomerProfile;
-import com.peaceelite.pojoProfile.RequirementProfile;
+//import com.peaceelite.pojoProfile.RequirementProfile;
 
 import lombok.AccessLevel;
 import lombok.Setter;
@@ -22,11 +22,14 @@ import org.springframework.data.domain.DomainEvents;
 import java.util.*;
 import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+import javax.persistence.CascadeType;
 
 @Data
 @Entity
-@NoArgsConstructor
 @RequiredArgsConstructor
+@NoArgsConstructor
 public class Customer{
 	
 	
@@ -36,12 +39,12 @@ public class Customer{
 	@NonNull
 	private String name;
 	
-	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<RequirementProfile> requirementProfiles = new LinkedList<RequirementProfile>();
-	public addRequirementProfile(RequirementProfile rp){
+	public void addRequirementProfile(RequirementProfile rp){
 		requirementProfiles.add(rp);
 	}
-	public removeRequirementProfile(RequirementProfile rp){
+	public void removeRequirementProfile(RequirementProfile rp){
 		requirementProfiles.remove(rp);
 	}
 		
