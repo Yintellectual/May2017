@@ -8,11 +8,11 @@ public class CrossFileSearchTool{
 	public static void main(String ... args)throws Exception{
 			
 		Path path1 = Paths.get("C:","SpringWorkSpace","zhiyuninfo","deviceclient");
-		Path path2 = Paths.get("C:","SpringWorkSpace","zhiyuninfo","deviceservice");
+		//Path path2 = Paths.get("C:","SpringWorkSpace","zhiyuninfo","deviceservice");
 		
 		
 		
-		searchDirectory(path2, "@RequestMapping").stream().forEach(System.out::println);
+		//searchDirectory(path2, "@RequestMapping").stream().forEach(System.out::println);
 		searchDirectory(path1, "restTemplate").stream().forEach(System.out::println);
 		
 		

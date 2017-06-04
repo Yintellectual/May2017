@@ -1,6 +1,7 @@
 Domian Driven Design, by Eric Evans
 
-bookmark:
+bookmark: Modeling Paradigms and Tool Support
+
 
 Part I Putting the domain model to work. ?"domain model"
 
@@ -106,4 +107,11 @@ Continue reading from "Shipping Operations and Routes"
 It is necessary to have a diagram of domain models when discussing about the software system, especially with non-programmers. 
 In such a diagram, both entities and methods should be well abstracted into fictional terms.  The purpose is to provide concise 
 and precise vocabulary for communication. However, this vocabulary should be used in domain modeling as well as coding. 
+
+Explanatory model is unlike domain model. An explanatory model is applied on an abstract concept of the domain model, to help 
+people understand its concept. There is no need for uml in explanatory model. Diagrams and human language can be good choices. 
+
+Analysis model is a super set of domain model. It represents an analysis of the business domain. However, there can be many analysis
+models for the same business domain and not every one of them are suitable to be implemented into codes. Choosing and refining the 
+analysis model to gain a model that can be applied on both business domian and codes. 
 
