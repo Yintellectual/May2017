@@ -159,3 +159,6 @@ commend the situation
 //
 
 java -jar target/deviceclient-0.1.jar -host http://ec2-35-166-69-106.us-west-2.compute.amazonaws.com:9091 -type fastComDevice yuchen-test
+
+
+////
