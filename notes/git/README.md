@@ -12,3 +12,10 @@ git checkout <branch>
 
 git push <source> <branch>
 
+
+force sync with origin master:
+git fetch origin
+git reset --hard origin/master
+Followed by:
+git clean -f
+
