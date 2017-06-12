@@ -34,12 +34,18 @@ http://www.anrip.com/post/1511
 			iptables -I FORWARD -p tcp --syn -i ppp+ -j TCPMSS --set-mss 1356
 			
 			
-9、网口启动时恢复NAT规则
-echo "#!/bin/sh" > /etc/network/if-pre-up.d/iptables
-echo "iptables-restore < /etc/iptables-rules" >> /etc/network/if-pre-up.d/iptables
-chmod 0755 /etc/network/if-pre-up.d/iptables
+	#!网口启动时恢复NAT规则
+	echo "#!/bin/sh" > /etc/network/if-pre-up.d/iptables
+	echo "iptables-restore < /etc/iptables-rules" >> /etc/network/if-pre-up.d/iptables
+	chmod 0755 /etc/network/if-pre-up.d/iptables
 			
-			
+2. write .sh for combined command lines
+
+	2.1 a .sh file start with #!/bin/bash
+	
+	2.2 chmod +x <filename> allows .sh file to be executed
+	
+	2.3 put command lines into the file.
 		
 		
 
