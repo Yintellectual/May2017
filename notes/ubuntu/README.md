@@ -46,6 +46,15 @@ http://www.anrip.com/post/1511
 	2.2 chmod +x <filename> allows .sh file to be executed
 	
 	2.3 put command lines into the file.
+
+3. ">"  and ">>"
+
+	">" will out put the result into a file, and replace all the old data
+	">>" do concatenate 
+
+4. check ownership
+
+	ls -l <filename>
 		
 		
 
