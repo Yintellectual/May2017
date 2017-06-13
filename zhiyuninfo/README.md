@@ -161,4 +161,10 @@ commend the situation
 java -jar target/deviceclient-0.1.jar -host http://ec2-35-166-69-106.us-west-2.compute.amazonaws.com:9091 -type fastComDevice yuchen-test
 
 
+<<<<<<< HEAD
 ////
+=======
+//plan:
+
+use 10 min loops
+>>>>>>> f14c345b6de5f65ece4ce973e0715c07f1598904
