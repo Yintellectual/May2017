@@ -29,3 +29,19 @@ Also,
 "START /B" means start this command in a new process but the same window.
 
 "/WAIT" means wait for this job to finish, which do not works on java programs.
+
+"SET <key>=<value>" sets the environment parameter, however, there must not be " " around "="
+
+">" means assign the return value into a file
+
+"<" retieves the value from a file
+
+here is another example:
+
+		cd c:\Users\yuchen\May2017\tools\openFileByNameTool
+
+		java OpenFileByName %1 %2 > temp.txt
+
+		set /p fileName=<temp.txt
+
+		%fileName%
