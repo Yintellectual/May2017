@@ -18,6 +18,7 @@ docker-compose down --rmi local
 	
 3. in docker-compose.yml, 
 
+
 services:
   web:
     build: .
@@ -30,3 +31,15 @@ services:
 	  will create a portal that passes anything in ./externaldata to "uploads" in the vm
 	  
 	  However, the jsp file can not be passed directly for tomcat. You can pass it to the vm first, then transfer it into the tomcat folder.
+	  
+4.  Trouble on windows:
+	
+	error code: "c: drive is not shared. please share it in docker for windows settings"
+	
+	solution: in Control Panel\Network and Internet\Network Connections, 
+				in properties of DockerNAT
+					uninstall and install "Microsoft 网络的文件和打印机共享"
+					
+5.  Docker has access to DocketNAT. 
+
+	use ipconfig to determine the IP for the real machine
