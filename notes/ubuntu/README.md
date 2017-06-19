@@ -39,6 +39,18 @@ http://www.anrip.com/post/1511
 	echo "iptables-restore < /etc/iptables-rules" >> /etc/network/if-pre-up.d/iptables
 	chmod 0755 /etc/network/if-pre-up.d/iptables
 			
+	1.4 
+		1.4.1 solution to connection limit reached
+			"
+			MGR: connections limit (100) reached, extra IP addresses ignored
+
+			MGR: Manager process started
+
+			MGR: Maximum of 100 connections available
+			"
+		
+			打开配置文件/etc/pptpd.conf，注释掉其中的logwtmp
+			
 2. write .sh for combined command lines
 
 	2.1 a .sh file start with #!/bin/bash
@@ -55,6 +67,8 @@ http://www.anrip.com/post/1511
 4. check ownership
 
 	ls -l <filename>
+	
+
 		
 		
 
