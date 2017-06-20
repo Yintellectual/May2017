@@ -6,10 +6,8 @@ After then, I'm going to build a web socket server-client pair.
 today I got 3 hours. 
 
 7
-
-8 
-
-9
-
+	{.cmd script}
+8:30
+	{tcp client}
 10
 

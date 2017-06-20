@@ -1,1 +1,1 @@
-c:\users\yuchen\May2017\Dairy\2017-06-18\README.md
+c:\Users\yuchen\may2017\codes\deviceclient-2017-05-15-restful-client\.settings\org.eclipse.jdt.core.prefs
