@@ -45,3 +45,8 @@ here is another example:
 		set /p fileName=<temp.txt
 
 		%fileName%
+		
+		
+Set charset to utf8:
+
+	cmd /K chcp 65001

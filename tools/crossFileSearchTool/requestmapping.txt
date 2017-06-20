@@ -1,0 +1,668 @@
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\BaseServiceRestController.java)
+
+
+@RequestMapping("/rest")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\BaseServiceRestController.java)
+
+
+@RequestMapping(value="/project/{projectId}/systemdiagramdata",method=RequestMethod.POST,consumes="text/plain")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\BaseServiceRestController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\ChartRestController.java)
+
+
+@RequestMapping("/rest")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\ChartRestController.java)
+
+
+@RequestMapping(value="/charts",method=RequestMethod.GET,produces="application/json")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\ChartRestController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\CompanyController.java)
+
+
+@RequestMapping("/company")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\CompanyController.java)
+
+
+@RequestMapping(method = RequestMethod.GET, produces = "application/json")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\CompanyController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceImageServiceController.java)
+
+
+@RequestMapping("/rest")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceImageServiceController.java)
+
+
+@RequestMapping(value="/deviceImages",method = RequestMethod.GET, produces = "application/json")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceImageServiceController.java)
+
+
+@RequestMapping("/rest")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceServiceController.java)
+
+
+@RequestMapping(value="/devices",method = RequestMethod.GET, produces = "application/json")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceServiceController.java)
+
+
+@RequestMapping(value="/device",method=RequestMethod.GET,produces="application/json")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceServiceController.java)
+
+
+@RequestMapping(value="/device/{id}/history/{attributeName}",method=RequestMethod.GET,produces="application/json")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceServiceController.java)
+
+
+@RequestMapping(value="/device/{id}/trigger",method=RequestMethod.GET,produces="text/plain")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceServiceController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceTypeServiceController.java)
+
+
+@RequestMapping("/rest")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceTypeServiceController.java)
+
+
+@RequestMapping(value="/devicetype/{typeName}/configdiagramdata",method=RequestMethod.POST,consumes="text/plain")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceTypeServiceController.java)
+
+
+@RequestMapping(value="/devicetype/{typeName}",method=RequestMethod.GET,produces="application/json")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\DeviceTypeServiceController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\IncidentServiceRestController.java)
+
+
+@RequestMapping(value = "/incidentservice/incidentdashboard/rest", produces = "application/json")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\IncidentServiceRestController.java)
+
+
+@RequestMapping(value="/tickets",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\IncidentServiceRestController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\QrCodeAPI.java)
+
+
+@RequestMapping("/api")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\QrCodeAPI.java)
+
+
+@RequestMapping(value="/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\rest\QrCodeAPI.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AgentManagerController.java)
+
+
+@RequestMapping("/agentmanager")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AgentManagerController.java)
+
+
+@RequestMapping(method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AgentManagerController.java)
+
+
+@RequestMapping(method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AgentManagerController.java)
+
+
+@RequestMapping(value = "/agent", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AgentManagerController.java)
+
+
+@RequestMapping(value = "/agent", method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AgentManagerController.java)
+
+
+@RequestMapping(value = "/deleteagent", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AgentManagerController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AttachmentController.java)
+
+
+@RequestMapping("/attachment")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AttachmentController.java)
+
+
+@RequestMapping(path = "/upload", method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AttachmentController.java)
+
+
+@RequestMapping(path = "/download", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AttachmentController.java)
+
+
+@RequestMapping(path = "/delete", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AttachmentController.java)
+
+
+@RequestMapping(path = "/retrive", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\AttachmentController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/tenants",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/tenants/{tenantId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/tenants",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/tenants/{tenantId}",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/users",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/users/{userId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/users",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/users/{userId}",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/users/profile",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/users/profile/updateinfo",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/users/profile/updatepassword", method = RequestMethod.POST, produces = "text/plain; charset=utf-8")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/deleteuser/{userId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/companies",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/companies/{companyId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/companies",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/companies/{companyId}",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/deletecompany/{companyId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/projects",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/projects/{projectId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value="/projects/{projectId}/systemdiagram",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/projects",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/projects/{projectId}",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+@RequestMapping(value = "/deleteproject/{projectId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\BaseServiceController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ChartManagerController.java)
+
+
+@RequestMapping("/chartmanager")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ChartManagerController.java)
+
+
+@RequestMapping(method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ChartManagerController.java)
+
+
+@RequestMapping(value="/movePosition",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ChartManagerController.java)
+
+
+@RequestMapping(method=RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ChartManagerController.java)
+
+
+@RequestMapping(value = "/edit", method=RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ChartManagerController.java)
+
+
+@RequestMapping(value = "/edit", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ChartManagerController.java)
+
+
+@RequestMapping(value = "/delete", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ChartManagerController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceImageController.java)
+
+
+@RequestMapping("/imagemanager")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceImageController.java)
+
+
+@RequestMapping(method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceImageController.java)
+
+
+@RequestMapping(method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceImageController.java)
+
+
+@RequestMapping(value = "/deleteimage", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceImageController.java)
+
+
+@RequestMapping(value="/edit",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceImageController.java)
+
+
+@RequestMapping(value="/edit",method=RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceImageController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping("/devicemanager")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping("/loaddevices")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value = "/export", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value = "/deletedevice", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value="/clonedevice",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value="/device/configdiagram",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value="/device/3dmodel",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value="/claimowner", method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value="/search",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value = "/device", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value = "/device/history",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value = "/device/history/export", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value = "/device", method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+@RequestMapping(value="/devicerevisionhistory/{revisionHistoryId}",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceManagerController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceTypeController.java)
+
+
+@RequestMapping("/devicemanager")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceTypeController.java)
+
+
+@RequestMapping(value = "/devicetype", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceTypeController.java)
+
+
+@RequestMapping(value = "/devicetype", method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceTypeController.java)
+
+
+@RequestMapping(value = "/deletetype", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceTypeController.java)
+
+
+@RequestMapping(value = "/devicetype/{typeName}", method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceTypeController.java)
+
+
+@RequestMapping(value="/devicetyperevisionhistory/{revisionHistoryId}",method=RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\DeviceTypeController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\EventController.java)
+
+
+@RequestMapping("/eventmanager")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\EventController.java)
+
+
+@RequestMapping(method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\EventController.java)
+
+
+@RequestMapping(value = "/deleteevent", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\EventController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+@RequestMapping(value = "/", method = GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+@RequestMapping(value="/monitor",method=GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+@RequestMapping(value = "/forgotpwd", method = GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+@RequestMapping(value = "/forgotpwd", method = POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+@RequestMapping(value = "/register/sendverifycode", method = GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+@RequestMapping(value="/activate",method= GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+@RequestMapping(value = "/register", method = GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+@RequestMapping(value = "/register", method = POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\HomeController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping("/incidentservice")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/tickets",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/tickets/{ticketId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/ticketHistory/{ticketHistoryId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/ticketadd",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/ticketadd",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/tickets/{ticketId}",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/tickets/{ticketId}/comments", method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/incidents",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/incidents/{incidentId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/incidents/export",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/addincident",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/addincident",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/incidents/{incidentId}",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/supportgroups",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/supportgroups",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/supportgroup",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/supportgroup",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/deletesupportgroup/{supportGroupId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/supportengineers",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/supportengineers/{supportEngineerId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/supportengineers/{supportEngineerId}",method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/deletesupportengineer/{supportEngineerId}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/myincidents",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/event/{eventId}", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+@RequestMapping(value = "/incidentdashboard",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\IncidentServiceController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\LoginController.java)
+
+
+@RequestMapping(value = "login/{org}",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\LoginController.java)
+
+
+@RequestMapping(value = "login",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\LoginController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\LogoutController.java)
+
+
+@RequestMapping(value = "/logoutsuccess",method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\LogoutController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\NotificationServiceController.java)
+
+
+@RequestMapping("/notificationservice")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\NotificationServiceController.java)
+
+
+@RequestMapping(method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\NotificationServiceController.java)
+
+
+@RequestMapping(value = "/list", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\NotificationServiceController.java)
+
+
+@RequestMapping(value = "/close/{ids}", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\NotificationServiceController.java)
+
+
+@RequestMapping(value = "/count", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\NotificationServiceController.java)
+
+
+@RequestMapping(value = "/{id}", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\NotificationServiceController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+@RequestMapping("/settings")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+@RequestMapping(method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+@RequestMapping(method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+@RequestMapping(value = "/users", method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+@RequestMapping(value = "/company", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+@RequestMapping(value = "/company", method = RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+@RequestMapping(value = "/company/edit", method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+@RequestMapping(value="/company/edit",method=RequestMethod.POST)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\ServiceSettingsController.java)
+
+
+import org.springframework.web.bind.annotation.RequestMapping;  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\WechatController.java)
+
+
+@RequestMapping("/wechat")  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\WechatController.java)
+
+
+@RequestMapping(method = RequestMethod.GET)  
+(from c:\Users\yuchen\submit\submit3\serviceportal\src\main\java\com\zhiyuninfo\serviceportal\web\WechatController.java)
+
+
