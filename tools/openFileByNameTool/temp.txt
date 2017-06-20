@@ -1,1 +1,1 @@
-c:\Users\yuchen\may2017\codes\deviceclient-2017-05-15-restful-client\.settings\org.eclipse.jdt.core.prefs
+c:\Users\yuchen\May2017\notes\spring-cloud\spring-validation\README.md

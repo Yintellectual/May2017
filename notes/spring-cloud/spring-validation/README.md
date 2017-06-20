@@ -64,3 +64,67 @@ Part three, in the JSP file
 	
 	Also, return "redirect:/blabla" won't support spring validation.
 >>>>>>> f14c345b6de5f65ece4ce973e0715c07f1598904
+
+
+
+添加基于spring validation 的用户表单验证功能
+
+Spring Validation 用法简介：
+
+	spring validation 遵循mvc原则。 简单来讲， 当验证不通过时， 一个包含错误信息的属性被添加到model中。 
+	这个错误信息属性的名字为“org.springframework.validation.BindingResult.<cmmandName>“， 而内容为一个Errors
+	或BindingResult。 在view中， 这个model被commandName所对应的表单下的错误信息标签所解析并展示。 但是这里有个条件，
+	那就是表单的commandName所对应的model必须存在。
+
+	代码示例：
+		controller中
+		model.addAttribute("newItem", user);
+		model.addAttribute("org.springframework.validation.BindingResult.newItem", errors);
+
+		jsp中
+		<sf:form method="post" id="newUserForm" commandName="newItem" role="form">
+			<sf:errors path="*" element="div" cssClass="errors" />
+		</sf:form>
+
+
+在serviceportal中， 用户表单提交一共出现了四次。 
+
+	1. 用户注册
+
+	2. 管理员添加用户
+
+	3. 管理员更新用户
+
+	4. 用户更新信息
+
+总的原则是， 当验证错误时， 则返回到原表单， 并在表单中保留用户输入信息。 错误信息集中展示到表单的最上部。 
+
+错误信息给出的原则是尽可能全面而精确。 
+
+信息验证的特殊原则为用户名， email， 电话号码三个条目不允许互相重复。 
+
+
+
+在四种具体情况中， 其中“4. 用户更新信息”采用了异步表单提交， 所以并未以jsp方式展示错误信息， 而是以ajax异步方法展示错误信息。 
+
+另外“2. 管理员更新用户”并不允许更新密码， 然而为了利用spring validation 的@Valid 机制， 所以在表单中增添了隐藏的密码输入框。 
+
+
+最后， 具体到返回原表单的做法是在表单处理的handler中， 将model作为参数返回表格生成的handler方法. 
+
+	代码示例：
+
+		@RequestMapping(value = "/users",method = RequestMethod.POST)
+		public String addUser(HttpServletRequest request, @Valid User newUser, Errors errors, Model model, Locale locale) {
+		
+			if errors
+				return getUsers(model, request, null, null);
+
+		}
+	
+		
+
+
+	
+
+	
