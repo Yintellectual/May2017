@@ -19,3 +19,11 @@ git reset --hard origin/master
 Followed by:
 git clean -f
 
+For windows, always do 
+
+	git config --global core.autocrlf true
+	
+	to ignire line endings.
+	
+	
+	
