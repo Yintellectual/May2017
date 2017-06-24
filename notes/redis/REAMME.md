@@ -135,9 +135,31 @@ Five Data Types in Redis
 		
 		1.1.8 setex -- set a value with expiration 
 		
-		1.1.9 
+		1.1.9 setnx	-- set value and create a new key if necessary
 		
-		https://www.tutorialspoint.com/redis/strings_setex.htm
+		1.1.10 setrange key_name offset value -- could be super powerful, just like setbit
+		
+		1.1.11 strlen -- return 0 if the value does not exists
+		
+		1.1.12 mset -- multiple set
+		
+		1.1.13 msetnx -- perform only if none of the keys exists
+		
+		1.1.14 psetex -- set expiration by milliseconds
+		
+		1.1.15 incr -- increase integer by 1
+		
+		1.1.16 incrby key num
+		
+		1.1.17 incrbyfloat -- perform on floats. create key if necessary. nil value is treated as 0
+		
+		1.1.18 decr
+		
+		1.1.19 decrby
+		
+		1.1.20 append
+		
+		* note that there is no split or insert
 
 2. Hash
 
@@ -147,7 +169,31 @@ Five Data Types in Redis
 		
 		2.1.2 hgetall
 		
+		2.1.3 hdel 
 		
+		2.1.4 hexists key field
+		
+		2.1.5 hget key field
+		
+		2.1.6 hgetall 
+		
+		2.1.7 hincrby
+		
+		2.1.8 hincrbyfloat
+		
+		2.1.9 hkeys -- return field names
+		
+		2.1.10 hlen -- count of fields
+		
+		2.1.11 hmget -- hash multiple get
+		
+		2.1.12 hmset -- hash multiple set
+		
+		2.1.13 hset 
+		
+		2.1.14 hsetnx -- set only if field does not exist
+		
+		2.1.15 hvals -- get all the values		
 
 3. List
 
@@ -156,6 +202,42 @@ Five Data Types in Redis
 		3.1.1 lpush
 		
 		3.1.2 lrange
+		
+		3.1.3 blpop -- block lefl pop
+		
+		3.1.4 brpop -- block right pop 
+		
+		3.1.5 brpoplpush list1 list2 timeout -- brpop list1 and lpush list2
+		
+		3.1.6 lindex -- get by index from leftside. the index starts from 0
+		
+		3.1.7 linsert key before/after pivot value -- left insertion, note that pivot is an existing value
+		
+		3.1.8 llen
+		
+		3.1.9 lpop
+		
+		3.1.10 lpush
+		
+		3.1.11 lpushx -- only if the key exists and holds a list
+		
+		3.1.12 LRANGE
+		
+		3.1.13 lrem key count value -- remove by value. the total number of removal is set by count. if count >0 then start from head, else if count <0 then start from tail, 
+		if count = 0 then remove all.
+		
+		3.1.14 lset key index value
+		
+		3.1.15 ltrim
+		
+		3.1.16 rpop
+		
+		3.1.17 rpoplpush
+		
+		3.1.18 rpush
+		
+		3.1.19 rpushx  -- restrictively right push
+		
 4. Set
 	
 	4.1 commands 
@@ -164,6 +246,12 @@ Five Data Types in Redis
 		
 		4.1.2 smembers
 		
+		4.1.3 scard -- count
+		
+		4.1.4 
+	
+	https://www.tutorialspoint.com/redis/strings_setex.htm
+	
 5. Sorted Set
 
 	5.1 commands
@@ -172,7 +260,8 @@ Five Data Types in Redis
 		
 		5.1.2 zrangebyscore
 		
-
+	
+	
 
 
 	

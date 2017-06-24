@@ -1,0 +1,1 @@
+"java timezone: The required time zone value supported by the Java platform. We can give this value as America/New York or as time zone code like GMT-8. Please see the class java.util.TimeZone for more information on supported time zones. http://www.codejava.net/java-ee/jstl/jstl-format-tag-timezone" 
