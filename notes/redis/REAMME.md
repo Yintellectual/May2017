@@ -78,3 +78,102 @@ Books:
 	Mastering Redis  
 	
 	
+--------------------2017-06-24----------
+
+Commonly used commands
+
+1. del -- delete by key
+
+2. dump -- return the "real" data stored in memory
+
+3. exists -- 1 for true and 0 for false
+
+4. expire -- set expire time by seconds
+
+5. expireat -- set expire time at unix timestamp like "1498263780"
+
+6. pexpire -- by milliseconds
+
+7. pexpireat -- milliseconds timestamp
+
+8. keys -- find keys
+
+9. move 
+
+10. persist -- remove expiration from the key
+
+11. pttl -- get the remining time of the key by milliseconds
+
+12. ttl -- by seconds
+
+13. randomkey -- random key
+
+14. rename -- rename and override the new name
+
+15. renamex -- rename if the new name does not exists
+
+16. type -- get type of the key
+Five Data Types in Redis
+
+1. String
+
+	1.1 commands
+	
+		1.1.1 set key value [ex seconds] [px milliseconds] [nx|xx]
+		
+		1.1.2 get 
+		
+		1.1.3 getrange key start end -- both ends inclusive
+		
+		1.1.4 getset key newValue
+		
+		1.1.5 getbit key offset -- get the bit at the position
+		
+		1.1.6 mget --multiple get
+		
+		1.1.7 setbit key offset -- can be super powerful if the math is rightRange
+		
+		1.1.8 setex -- set a value with expiration 
+		
+		1.1.9 
+		
+		https://www.tutorialspoint.com/redis/strings_setex.htm
+
+2. Hash
+
+	2.1 commands
+	
+		2.1.1 hmset
+		
+		2.1.2 hgetall
+		
+		
+
+3. List
+
+	3.1 commands 
+	
+		3.1.1 lpush
+		
+		3.1.2 lrange
+4. Set
+	
+	4.1 commands 
+	
+		4.1.1 sadd
+		
+		4.1.2 smembers
+		
+5. Sorted Set
+
+	5.1 commands
+		
+		5.1.1 zadd
+		
+		5.1.2 zrangebyscore
+		
+
+
+
+	
+	
