@@ -248,9 +248,29 @@ Five Data Types in Redis
 		
 		4.1.3 scard -- count
 		
-		4.1.4 
-	
-	https://www.tutorialspoint.com/redis/strings_setex.htm
+		4.1.4 sdiff -- things in set1 but not in the other sets
+		
+		4.1.5 sdiffstore -- store the different elements in another set
+		
+		4.1.6 sinter -- intersection
+		
+		4.1.7 sinterstore 
+		
+		4.1.8 sismember
+		
+		4.1.9 smove source destination member
+		
+		4.1.10 spop key [count]
+		
+		4.1.11 srandmember -- can be troublesome in windows, because the result remains the same for a while
+		
+		4.1.12 srem
+		
+		4.1.13 sunion
+		
+		4.1.14 sunionstore
+		
+		4.1.15 sscan key cursor [match pattern] [count count]
 	
 5. Sorted Set
 
@@ -260,7 +280,22 @@ Five Data Types in Redis
 		
 		5.1.2 zrangebyscore
 		
-	
+		5.1.3 zadd -- buggy in windows
+		
+		5.1.4 zcard -- count
+		
+		5.1.5 zcount -- count 
+		
+		5.1.6 zincrby -- 
+		
+		5.1.7 zrange destination key_number keys... [weights weights...]
+		
+		5.1.8 zlexcount databases:1 min max -- where min and max are string range items like "[h", "[r", "+", "-".
+		
+		5.1.9 zrange key start stop [withscores]
+		
+		5.1.10 zrangebylex key min max [limit offset count] ??
+		https://www.tutorialspoint.com/redis/sorted_sets_zrangebylex.htm
 	
 
 
