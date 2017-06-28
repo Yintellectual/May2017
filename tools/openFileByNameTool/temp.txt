@@ -1,2 +1,1 @@
-c:\Users\yuchen\May2017\notes\redis\REAMME.md
-c:\Users\yuchen\May2017\notes\spring-cloud\spring-data-redis\README.md
+c:\Users\yuchen\May2017\tools\encoder\README.md

@@ -1,3 +1,23 @@
+Now I got a chance and the knowledge to rewrite deviceclient. However, the jobs should be noted here:
+
+	1. Analyse the functionality of deviceclient
+	
+	2. Talk to AliMail to solve the activation email issue
+	
+	3. Fix the re-login button in the forget-password page
+	
+	4. Fix the bug when user set an in/out key to null for a file agent
+	
+	5. In the email activation page, add a login button 
+	
+For the deviceclient project, 
+	
+	ScheduledThreadPool should be studied carefully 
+	
+	Spring-boot configure should be studied carefully
+
+
+/////////////////////
 1. Server should be at least T2.large
 
 2. config application.properties in serviceportal
