@@ -11,3 +11,7 @@
 3. to set cmd encoding to utf8 in windows: 
 
 	3.1 in cmd:  cmd /K chcp 65001
+
+4. for redis, start with --raw
+
+

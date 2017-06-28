@@ -1,99 +1,16 @@
-Today theres three things to do:
+Today I want my system to be online. 
 
-1. Write a rabbitMQ POC project
+3. Timestamps should be considered
 
-2. Write a selectively update repository POC project
+1. Information should be displayed meaningfully
 
-3. Learn UML from the introduction provided by some blogger from IBM
-		https://www.ibm.com/developerworks/rational/library/769.html?ca=drs-
+2. Meaningful information should be pushed into redis
 
-		
-Basically, I can use the same project to sample both rabbitMQ and selectively-updatable-repository.
+Today we consider only
 
-This project depends on a local rabbitMQ server, and contains three componets:
+1. Big gifts -- with timestamps
 
-The first component is the Entity POJOs. These POJO is considered common accoss the all the applications of the whole project.
-Practically, they are the protocal of inter-application communication. 
+2. Chat -- with timestamps
 
-The second component is the client application.
+3. User 
 
-The third component is the service application that is backed by an inmemory database. 
-
-The design of such an project should be made in UML. The development should restrictively follow the code of Test-Driven-Development.
-
-Timetable（total 12 hours）: 
-
-10
-
-	{
-
-		1 hour: Reviwement of Spring Data and setting up service application
-
-	}
-
-11
-
-	{
-		
-		1 hour: read uml introduction and leaving notes
-
-	}
-
-12
-
-	{
-		
-		1 hour: POC project design
-	
-	}
-
-1: Lunch
-
-//
-
-2
-
-	{
-		
-		2 hour: test-driven selectively-updatable-repository development
-	
-	}
-
-4
-
-	{
-		
-		1 hour: setting up client application and communicate service through restful api
-	
-	}
-
-5: Refreshment and rest 
-
-//
-
-6
-
-//
-
-7: Coffee
-
-	{
-		
-		1 hour: read about concepts from rabbitMQ 
-
-	}
-
-	{
-
-		1 hour: implement inter-application communicate through rabbitMQ
-	
-	}
-9
-
-10:Dinner
-
-//
-
-Works:
-
-count: 8 hours in total

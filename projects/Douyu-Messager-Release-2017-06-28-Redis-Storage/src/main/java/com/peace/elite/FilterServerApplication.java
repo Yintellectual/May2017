@@ -6,15 +6,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.peace.elite.entities.AudienceRankList;
+import com.peace.elite.entities.BigGift;
+import com.peace.elite.entities.BonusGift;
+import com.peace.elite.entities.BroadcastStatus;
 import com.peace.elite.entities.BroadcasterRankList;
 import com.peace.elite.entities.ChatMessage;
 import com.peace.elite.entities.DouyuMessageType;
+import com.peace.elite.entities.LuckyMoney;
 import com.peace.elite.entities.OnlineGift;
 import com.peace.elite.entities.ServerHeartBeat;
+import com.peace.elite.entities.SmallGift;
+import com.peace.elite.entities.SuperChatMessage;
+import com.peace.elite.entities.UserEnter;
+import com.peace.elite.redisRepository.AudienceRedisRepository;
 import com.peace.elite.repository.AudienceRankListRepository;
 import com.peace.elite.repository.BigGiftRepository;
 import com.peace.elite.repository.BonusGiftRepository;
@@ -26,6 +38,8 @@ import com.peace.elite.repository.ServerHeartBeatRepository;
 import com.peace.elite.repository.SmallGiftRepository;
 import com.peace.elite.repository.SuperChatMessageRepository;
 import com.peace.elite.repository.UserEnterRepository;
+
+import javassist.compiler.ast.NewExpr;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.CommandLineRunner;
@@ -51,7 +65,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 @SpringBootApplication
 public class FilterServerApplication {
 
-	public static final int ROOM_ID = 196;
+	public static final int ROOM_ID = 2020877;
 	private static final Logger LOGGER = Logger.getLogger( FilterServerApplication.class.getName() );
 	public Instant lastHeartBeat = Instant.now();
 	@Autowired
@@ -80,6 +94,8 @@ public class FilterServerApplication {
 	SuperChatMessageRepository superChatMessageRepository;
 	@Autowired
 	UserEnterRepository UserEnterRepository;
+	@Autowired
+	AudienceRedisRepository audienceRedisRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(FilterServerApplication.class, args);
@@ -99,6 +115,25 @@ public class FilterServerApplication {
         return "dada";//restTemplate.getForObject(url, String.class);
     }
  */	
+	
+	@Bean
+	public RedisTemplate<String, String> redisTemplate() {
+	    RedisTemplate<String, String> template = new RedisTemplate<>();
+	    //start redis with --raw, and  cmd /K chcp 65001
+	    template.setDefaultSerializer(new StringRedisSerializer());
+	    template.setConnectionFactory(jedisConnectionFactory());
+	    return template;
+	}
+
+	@Bean
+	JedisConnectionFactory jedisConnectionFactory() {
+	    JedisConnectionFactory jedisConFactory = new JedisConnectionFactory();
+	    jedisConFactory.setHostName("localhost");
+	    jedisConFactory.setPort(6379);
+	    return jedisConFactory;
+	}
+	
+	
 	@Bean
 	public SocketContainer sc() {
 		SocketContainer sc = new SocketContainer(socket());
@@ -222,6 +257,7 @@ public class FilterServerApplication {
 		
 		char[] buffer = new char[BUFFER_SIZE];
 		Instant instant = Instant.now();
+		//Set<String> richguys= new HashSet<>();
 		while (true) {
 			reader.read(buffer, 0, BUFFER_SIZE);
 			Instant instantRead = Instant.now();
@@ -251,41 +287,67 @@ public class FilterServerApplication {
 							case keeplive:
 								ServerHeartBeat serverHeartBeat = ServerHeartBeat.getInstance(map);
 								//serverHeartBeatRepository.save(serverHeartBeat);
-								display = serverHeartBeat.toString();
+								//display = serverHeartBeat.toString();
 								break;
+								
+							//2017-06-28
 							case chatmsg:
 								ChatMessage chatMessage = ChatMessage.getInstance(map);
 								//chatMessageRepository.save(chatMessage);
-								display = chatMessage.toString();
+								audienceRedisRepository.chatAdd(chatMessage);
+								//display = chatMessage.toString();
 								break;
 							case onlinegift: 
 								OnlineGift onlineGift = OnlineGift.getInstance(map);
 								//onlineGiftRepository.save(onlineGift);
-								display = onlineGift.toString();
+								//display = onlineGift.toString();
+								
 								break;
+								//火箭gfid=196
+								//飞机gfid=195
 							case dgb:
+								SmallGift smallGift = SmallGift.getInstance(map);
+								//display = smallGift.toString();
+								if(smallGift.getGfid()==195||smallGift.getGfid()==196){
+									display = smallGift.toString();
+									audienceRedisRepository.moneyAdd(smallGift);
+								}
 								break;
 							case uenter:
+								UserEnter userEnter = UserEnter.getInstance(map);
 								break;
 							case bc_buy_deserve:
+								BonusGift bonusGift = BonusGift.getInstance(map);
+								display = bonusGift.toString();
 								break;
 							case rss:
+								BroadcastStatus broadcastStatus = BroadcastStatus.getInstance(map);
 								break;
 							case ranklist:
+								BroadcasterRankList broadcasterRankList  = BroadcasterRankList.getInstance(map);
 								break;
 							case ssd:
+								SuperChatMessage superChatMessage = SuperChatMessage.getInstance(map);
 								break;
+							//2017-06-28
+							//it shows all the rockets in douyu
 							case spbc:
+								BigGift bigGift = BigGift.getInstance(map);
+								//display = bigGift.toString();
+								//richguys.add(bigGift.getSn());
 								break;
 							case ggbb:
+								LuckyMoney luckyMoney = LuckyMoney.getInstance(map);
 								break;
 							case rankup:
+								AudienceRankList audienceRankList = AudienceRankList.getInstance(map);
 								break;
 							default:
 								break;
 						}
 						try{
-							webSocket.convertAndSend("/topic/greetings", new Greeting(display));
+							if(display!=null)
+								webSocket.convertAndSend("/topic/greetings", new Greeting(display));
 						}catch(NullPointerException ue){
 							//do nothing
 						}
