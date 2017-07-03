@@ -40,3 +40,57 @@ We need a real time dialog with the browser. WebSocket supported by Spring may h
 
 	2.4
 	client
+	
+3. STOMP protocal
+
+	http://stomp.github.io/stomp-specification-1.2.html#Abstract
+	
+	3.1 Overview
+	
+		3.1.1 a stomp server is modelled as a set of destinations to which messages can be sent.
+	
+		3.1.2 a stomp client can send send frame or subscribe frame
+	3.2 STOMP Frames
+	
+	3.3 Connecting
+	
+	3.4 Client Frames
+	
+	3.5 Server Frames
+	
+	3.6 Frames and Headers
+	
+	3.7 Augmented BNF (RFC 2616)
+	
+		command = client-command | server-command 
+		
+		client-command = "SEND"
+						|"SUBSCRIBE"
+						|"UNSUBSCRIBE"
+						|"BEGIN"
+						|"COMMIT"
+						|"ABORT"
+						|"ACK"
+						|"NACK"
+						|"DISCONNECT"
+						|"CONNECT"
+						|"STOMP"
+						
+		
+		server-command = "CONNECTED"
+                      | "MESSAGE"
+                      | "RECEIPT"
+                      | "ERROR"
+					  
+		frame = command EOL 
+				*(header EOL)
+				EOL
+				*OCTET
+				NULL
+				*(EOL)
+				
+		frame-stream = 1*frame
+		
+		header = header-name ":" header-value
+		header-name = 1*<any OCTET except CR or LF or ":">
+		header-value = *<any OCTET except CR or LF or ":">
