@@ -2,6 +2,8 @@ Redis is popular these days. It is taged with the most popular concepts like
 cloud, distribute, message queue, and in memory database. It is widely supported by
 both the frameworks and the instructure providers. 
 
+maximum size for any redis keys and values are 512MB
+
 Default port : 6379
 
 On windows, redis is installed as an service which can be managed in "task manager"> "service"
@@ -10,9 +12,10 @@ Data in redis is save because redis stores the data on disk before grace shutdow
 
 Redis is fast. 1 million key-value pairs takes about 100mb memory. 
 
+
 Redis store data in four structures:
 
-	String, List, Hash and Set
+	String, List, Hash and Set. But also BitString, and HyperLogLog.
 	
 	methods like leftPush and rightRange are common when manipulating lists. 
 	
@@ -118,6 +121,8 @@ Five Data Types in Redis
 1. String
 
 	1.1 commands
+	
+		bit operations are O(1) and O(n), whith is better than String operations
 	
 		1.1.1 set key value [ex seconds] [px milliseconds] [nx|xx]
 		
@@ -295,6 +300,11 @@ Five Data Types in Redis
 		5.1.9 zrange key start stop [withscores]
 		
 		5.1.10 zrangebylex key min max [limit offset count] ??
+		
+			Alphabetic order. "("=exclude "["=include "+"=all positive items to infinity "-"=all negative items to infinity
+			
+			Buggy in windows version
+		
 		https://www.tutorialspoint.com/redis/sorted_sets_zrangebylex.htm
 	
 
