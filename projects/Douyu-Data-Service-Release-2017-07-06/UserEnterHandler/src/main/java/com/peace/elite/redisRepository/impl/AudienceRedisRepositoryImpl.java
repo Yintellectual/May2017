@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.peace.elite.entities.ChatMessage;
 import com.peace.elite.entities.SmallGift;
+import com.peace.elite.entities.UserEnter;
 import com.peace.elite.redisRepository.AudienceRedisRepository;
 @Repository
 public class AudienceRedisRepositoryImpl implements AudienceRedisRepository {
@@ -89,52 +90,52 @@ public class AudienceRedisRepositoryImpl implements AudienceRedisRepository {
 		long uid = smallGift.getUid();
 		long amount = 0;
 		switch((int)smallGift.getGfid()){
-//			//办卡
-//			case 924:
-//				amount = 6;
-//				break;
-//			//猫耳 0.2
-//			case 529:
-//				 smallMoney+=0.2;
-//				 break;
-//			//荧光棒
-//			case 824:
-//				//smallMoney+=0.1;
-//				break;
-//			
-//			//弱鸡
-//			case 193:
-//				//smallMoney+=0.2;
-//				break;
-//			//怂
-//			case 713:
-//				//smallMoney+=0.1;
-//				break;
-//			//赞
-//			case 192:
-//				//smallMoney+=0.1;
-//				break;
-//			//呵呵
-//			case 519:
-//				//smallMoney+=0.1;
-//				break;
-//			
-//		    //稳 
-//			case 520:
-//				//smallMoney+=0.1;
-//				break;
-//			//双马尾 0.1
-//			case 918:
-//				 smallMoney+=0.1;
-//				 break;
-//			case 195:
-//				amount = 100;
-//				break;
-//			case 196:
-//				amount = 500;
-//				break;
-//			default: 
-//				break;
+			//办卡
+			case 924:
+				amount = 6;
+				break;
+			//猫耳 0.2
+			case 529:
+				 smallMoney+=0.2;
+				 break;
+			//荧光棒
+			case 824:
+				smallMoney+=0.1;
+				break;
+			
+			//弱鸡
+			case 193:
+				smallMoney+=0.2;
+				break;
+			//怂
+			case 713:
+				smallMoney+=0.1;
+				break;
+			//赞
+			case 192:
+				smallMoney+=0.1;
+				break;
+			//呵呵
+			case 519:
+				smallMoney+=0.1;
+				break;
+			
+		    //稳 
+			case 520:
+				smallMoney+=0.1;
+				break;
+			//双马尾 0.1
+			case 918:
+				 smallMoney+=0.1;
+				 break;
+			case 195:
+				amount = 100;
+				break;
+			case 196:
+				amount = 500;
+				break;
+			default: 
+				break;
 		}
 		if(amount!=0){
 			moneyAdd(uid, amount);
@@ -151,12 +152,6 @@ public class AudienceRedisRepositoryImpl implements AudienceRedisRepository {
 		hashOps.increment(appendKeyById(audience_uid, uid), "money", amount);
 		zetOps.add(appendKeyById(audience_money_uid, uid), appendValueByTimeStamp(""+amount, timeStamp), timeStamp);
 		zetOps.incrementScore(audiences_money, ""+uid, amount);
-	}
-	
-	
-	
-	private long getTimeStamp(){
-		return new Date().getTime()/1000;
 	}
 	
 	@Override
@@ -210,5 +205,14 @@ public class AudienceRedisRepositoryImpl implements AudienceRedisRepository {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	/*
+	 * 
+	 * 
+	 */
+	@Override
+	public void userEnter(UserEnter userEnter){
+		
 	}
 }

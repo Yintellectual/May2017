@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
-
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Repository;
 
-
+import com.peace.elite.entities.BonusGift;
 import com.peace.elite.entities.ChatMessage;
-import com.peace.elite.entities.SmallGift;
+
 import com.peace.elite.redisRepository.AudienceRedisRepository;
 @Repository
 public class AudienceRedisRepositoryImpl implements AudienceRedisRepository {
@@ -79,84 +79,31 @@ public class AudienceRedisRepositoryImpl implements AudienceRedisRepository {
 	
 	double smallMoney = 0.0;
 	@Override
-	public void moneyAdd(SmallGift smallGift){
-		try{
-			hashOps.put(appendKeyById(audience_uid, smallGift.getUid()),"name",smallGift.getNn());
-		}catch(Exception e){
-			System.out.println(smallGift);
-			e.printStackTrace();
-		}
-		long uid = smallGift.getUid();
+	public void moneyAdd(BonusGift bonusGift){
+		hashOps.put(appendKeyById(audience_uid, bonusGift.getUid()),"name",bonusGift.getNn());
+		long uid = bonusGift.getUid();
+		long lev = bonusGift.getLev();
 		long amount = 0;
-		switch((int)smallGift.getGfid()){
-//			//办卡
-//			case 924:
-//				amount = 6;
-//				break;
-//			//猫耳 0.2
-//			case 529:
-//				 smallMoney+=0.2;
-//				 break;
-//			//荧光棒
-//			case 824:
-//				//smallMoney+=0.1;
-//				break;
-//			
-//			//弱鸡
-//			case 193:
-//				//smallMoney+=0.2;
-//				break;
-//			//怂
-//			case 713:
-//				//smallMoney+=0.1;
-//				break;
-//			//赞
-//			case 192:
-//				//smallMoney+=0.1;
-//				break;
-//			//呵呵
-//			case 519:
-//				//smallMoney+=0.1;
-//				break;
-//			
-//		    //稳 
-//			case 520:
-//				//smallMoney+=0.1;
-//				break;
-//			//双马尾 0.1
-//			case 918:
-//				 smallMoney+=0.1;
-//				 break;
-//			case 195:
-//				amount = 100;
-//				break;
-//			case 196:
-//				amount = 500;
-//				break;
-//			default: 
-//				break;
+		switch((int)lev){
+			case 1:
+				amount = 15;
+				break;
+			case 2:
+				amount = 30;
+				break;
+			case 3:
+				amount = 50;
+				break;
+			default: 
+				break;
 		}
-		if(amount!=0){
-			moneyAdd(uid, amount);
-		}else {
-			if(smallMoney>100.0){
-				moneyAdd(0L, 100L);
-				smallMoney -= 100;
-			}
-		}
+		moneyAdd(uid, amount);
 	}
-
 	private void moneyAdd(long uid, long amount){
 		long timeStamp = new Date().getTime()/1000;
 		hashOps.increment(appendKeyById(audience_uid, uid), "money", amount);
 		zetOps.add(appendKeyById(audience_money_uid, uid), appendValueByTimeStamp(""+amount, timeStamp), timeStamp);
 		zetOps.incrementScore(audiences_money, ""+uid, amount);
-	}
-	
-	
-	
-	private long getTimeStamp(){
-		return new Date().getTime()/1000;
 	}
 	
 	@Override
