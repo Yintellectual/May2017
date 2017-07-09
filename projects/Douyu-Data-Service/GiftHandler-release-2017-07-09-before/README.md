@@ -1,35 +1,33 @@
 Redis Database Schema
 
 Key Space					Type			Discription				Purpose
-all start with project name "douyu-db"
-1. user:{uid}					hash			- name
+
+user:{uid}					hash			- name
 											- gift-total
 											
-2. gift:{gid}					hash			- name
+gift:{gid}					hash			- name
 (rocket, jet, card and packaged small gifts)- price
 									
-3. giving:{uid}:{gid}			string			count
+giving:{uid}:{gid}			string			count
 											
 									
-4. givings:time-line			zset			value is giving key
+givings:time-line			zset			value is giving key
 											score is unix-timestamp
 									
-5. users:gift-rank:total		zset			value is uid
+users:gift-rank:total		zset			value is uid
 											score is gift-total
 									
-6. users:gift-rank:{gift id}	zset			value is uid
+users:gift-rank:{gift id}	zset			value is uid
 											score is gift count of the type
 											
-7. count:gift:{gift id}		string			
+gift:{gift id}:total		string			
 
 
-8. global:gifts				set
+global:gifts				set
 
 
-9. global:users				set
+global:users				set
 
-
-10.count:users 				String 
 
 repository interface:
 
