@@ -43,3 +43,12 @@ services:
 5.  Docker has access to DocketNAT. 
 
 	use ipconfig to determine the IP for the real machine
+	
+6.  Dockerfile commands
+
+	6.1 ADD
+	
+	6.2 COPY
+	
+	6.3 RUN rm -rf
+	

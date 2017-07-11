@@ -1,0 +1,8 @@
+System.err.println(String.format("[Warning] The device %s doesn't have the attribute %s!",this.getName(),attributeName));  
+(from c:\Users\yuchen\Desktop\2017-07-01\common\common-utility\src\main\java\com\zhiyuninfo\utility\domain\Device.java)
+
+
+logger.debug(String.format("[Warning] The device %s doesn't have the attribute %s!",this.getName(),attributeName));  
+(from c:\Users\yuchen\Desktop\2017-07-01\deviceservice\src\main\java\com\zhiyuninfo\dm\dao\Device.java)
+
+
