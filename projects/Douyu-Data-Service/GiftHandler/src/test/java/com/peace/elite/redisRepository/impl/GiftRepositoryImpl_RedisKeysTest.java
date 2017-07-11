@@ -10,7 +10,7 @@ import static com.peace.elite.redisRepository.impl.GiftRepositoryRedisImpl.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class GiftRepositoryImplTest {
+public class GiftRepositoryImpl_RedisKeysTest {
 	
 	@Autowired
 	GiftRepositoryRedisImpl giftRepository;
@@ -69,24 +69,5 @@ public class GiftRepositoryImplTest {
 	@Test
 	public void keyTestCountUsers(){
 		assertTrue(COUNT_USERS,"douyu-db:count:users".equals(COUNT_USERS));
-	}
-	
-	@Test
-	public void userNameUpdateSetUserName(){
-		String userName = "peter";
-		long uid = 100;
-		
-		giftRepository.userNameUpdate(100, userName);
-		
-		String updatedUserName=giftRepository.getUserName(USER(uid));
-		assertTrue(updatedUserName, "peter".equals(updatedUserName));
-	}
-	
-	@Test
-	public void userGiftSumUpdateGiftSum{
-		
-		
-		
-		
 	}
 }

@@ -11,7 +11,7 @@ all start with project name "douyu-db"
 3. giving:{uid}:{gid}			string			count
 											
 									
-4. givings:time-line			zset			value is giving key
+4. givings:time-line			zset			value is giving key:unix-timestamp
 											score is unix-timestamp
 									
 5. users:gift-rank:total		zset			value is uid
