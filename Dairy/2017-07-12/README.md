@@ -5,14 +5,19 @@ Today I have about 10 hours to spend.
 1
 
 2
+	chartJS
 
 3
-
+	chartJS
+	
 4
-
+	EAT
+	
 5
+	websocket
 
 6
+	websocket
 
 7
 
@@ -44,4 +49,16 @@ We have studied the customer satisfaction theory which says that the customers w
 Also, since our data is well labelled by timestamps, we can also find out the change of each customers contribution over time. I may guess that the model may like waves, customers come and go like waves. There must be some loyal poor guys, loyal middle class, and some one time middle class. We will know who are they. 
 
 We need a front-end chart framework to help to show the discovery.
+
+Today I would have a bar chart to display all the rocket customers with height of the chart as rocket counter for that customer. The chart should dynamic and driven by the real time data. 
+
+I will spend hours to read about chartJS, and to use its functionality of adding new data and updating data.
+
+After then, I will have websocket to deliver the data to chartJS.
+
+Basically, there should be method that controls the behavior of the chart, which is then called by sockJS
+
+
+
+
 

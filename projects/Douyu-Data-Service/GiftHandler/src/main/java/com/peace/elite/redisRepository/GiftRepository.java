@@ -40,6 +40,7 @@ public interface GiftRepository {
 	//2.3 search by the gift rank, because most interesting names are in high rank
 	String getKeyUserByName(String name);
 	String getUserName(String keyUser);
+	String getUserName(long uid);
 	String getUserGiftSum(String keyUser);
 	String getUserGiftSumByName(String name);
 	String getUserGiftSum(long uid);

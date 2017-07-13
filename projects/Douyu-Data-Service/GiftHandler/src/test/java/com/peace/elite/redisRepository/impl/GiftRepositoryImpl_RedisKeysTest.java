@@ -29,45 +29,45 @@ public class GiftRepositoryImpl_RedisKeysTest {
 	@Test
 	public void keyTestUser(){
 		String keyUser = USER(100l);
-		assertTrue(keyUser ,"douyu-db:user:100".equals(keyUser));
+		assertTrue(keyUser ,"douyu-db-test:user:100".equals(keyUser));
 	}
 	
 	@Test
 	public void keyTestGift(){
 		String key = GIFT(100l);
-		assertTrue(key,"douyu-db:gift:100".equals(key));
+		assertTrue(key,"douyu-db-test:gift:100".equals(key));
 	}
 	@Test
 	public void keyTestGiving(){
 		String key = GIVING(10, 100);
-		assertTrue(key,"douyu-db:giving:10:100".equals(key));
+		assertTrue(key,"douyu-db-test:giving:10:100".equals(key));
 	}
 	@Test
 	public void keyTestGivingsTimeLing(){
-		assertTrue(GIVINGS_TIME_LINE,"douyu-db:givings:time-line".equals(GIVINGS_TIME_LINE));
+		assertTrue(GIVINGS_TIME_LINE,"douyu-db-test:givings:time-line".equals(GIVINGS_TIME_LINE));
 	}
 	@Test
 	public void keyTestUsersGiftRankTotal(){
-		assertTrue(USERS_GIFT_RANK_TOTAL,"douyu-db:users:gift-rank:total".equals(USERS_GIFT_RANK_TOTAL));
+		assertTrue(USERS_GIFT_RANK_TOTAL,"douyu-db-test:users:gift-rank:total".equals(USERS_GIFT_RANK_TOTAL));
 	}
 	@Test
 	public void keyTestUsersGiftRank(){
-		assertTrue(USERS_GIFT_RANK(100l), "douyu-db:users:gift-rank:100".equals(USERS_GIFT_RANK(100l)));
+		assertTrue(USERS_GIFT_RANK(100l), "douyu-db-test:users:gift-rank:100".equals(USERS_GIFT_RANK(100l)));
 	}
 	@Test
 	public void keyTestCountGift(){
-		assertTrue(COUNT_GIFT(100l),"douyu-db:count:gift:100".equals(COUNT_GIFT(100l)));
+		assertTrue(COUNT_GIFT(100l),"douyu-db-test:count:gift:100".equals(COUNT_GIFT(100l)));
 	}
 	@Test
 	public void keyTestGlobalGifts(){
-		assertTrue(GLOBAL_GIFTS,"douyu-db:global:gifts".equals(GLOBAL_GIFTS));
+		assertTrue(GLOBAL_GIFTS,"douyu-db-test:global:gifts".equals(GLOBAL_GIFTS));
 	}
 	@Test
 	public void keyTestGlobalUsers(){
-		assertTrue(GLOBAL_USERS,"douyu-db:global:users".equals(GLOBAL_USERS));
+		assertTrue(GLOBAL_USERS,"douyu-db-test:global:users".equals(GLOBAL_USERS));
 	}
 	@Test
 	public void keyTestCountUsers(){
-		assertTrue(COUNT_USERS,"douyu-db:count:users".equals(COUNT_USERS));
+		assertTrue(COUNT_USERS,"douyu-db-test:count:users".equals(COUNT_USERS));
 	}
 }

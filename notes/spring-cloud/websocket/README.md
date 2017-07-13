@@ -337,4 +337,25 @@ $(function () {
 		org.springframework.messaging.simp.user.UserDestinationMessageHandler
 	
 	by default.
-		
+
+11. performance
+http://blog.arungupta.me/rest-vs-websocket-comparison-benchmarks/
+
+	Intuitively, websocket works faster than rest-api. However, the since the choice of protocals is considered architecture, the exact numbers and statistics are valuable. 
+	
+	Here is a study about the performance gap between websocket vs rest, or stomp vs http protocals.
+	
+	Stomp is bidirectional, full-duplex(??), single tcp connection, lean protocal. After handshaking, each stomp message can be as short as few bytes, while a http protocal usually contains headers of hundreds of characters. 
+	
+	Http may take 10 times longer than stomp to transfer the same amount of payload. Thanks to http headers, the shorter each message, the greater the performance gap.
+	
+	Infact, http is about 10 times slower for each message. However, if the message is very long, then the gap may go as small as 3 times. 
+	
+	This story tells that always choose websocket over http.
+	
+	
+
+	
+	
+	
+	

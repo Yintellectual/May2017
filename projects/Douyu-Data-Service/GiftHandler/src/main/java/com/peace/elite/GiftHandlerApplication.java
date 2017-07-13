@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -15,10 +16,17 @@ import com.peace.elite.entities.DouyuMessageType;
 import com.peace.elite.entities.SmallGift;
 import com.peace.elite.redisMQ.RedisMQ;
 import com.peace.elite.redisRepository.AudienceRedisRepository;
-
+import com.peace.elite.redisRepository.impl.GiftRepositoryRedisImpl;
 
 import org.springframework.boot.CommandLineRunner;
 import java.util.*;
+import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+import java.text.DateFormat;
 import java.time.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +37,82 @@ public class GiftHandlerApplication {
 
 	public Instant lastHeartBeat = Instant.now();
 	@Autowired
-	AudienceRedisRepository audienceRedisRepository;
+	GiftRepositoryRedisImpl giftRepositoryRedisImpl;
 	@Autowired
 	RedisMQ redisMQ;
 	@Autowired
 	private SimpMessagingTemplate webSocket;
+	@Autowired
+	private RocketBarChart rocketBarChart;
+	@Autowired
+	private TimeLineBarChart timeLineBarChart;
+	@Autowired
+	private ThreadPoolExecutor threadPoolExecutor;
+	@Autowired
+	private ChartDataServiceFor2DimensionalCharts chartService;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(GiftHandlerApplication.class, args);
 	}
-
+	
+	
+//	@Bean 
+//	public Thread testThread(){
+//		Thread test = new Thread(()->{
+//			
+//			
+//			Random random = new Random();
+//			final int UPDATES = 10000;
+//			final int USERS = 100;
+//			IntStream.range(0, UPDATES).forEach(l-> {
+//				long uid = random.nextInt(USERS);
+//				rocketBarChart.update(uid, "User "+uid);
+//				try{Thread.sleep(200);}catch(Exception e){}
+//			});
+//			
+//		});
+//		test.start();
+//		return test;
+//	}
+	
+//	@Bean
+//	public Thread dataMiningThread(){
+//		Thread miner = new Thread(()->{
+//			final long fiveMinutes = 300000l;
+//			final long startTime = 1499860800000l;
+//			for(int i=0;i<100;i++){
+//				long start = startTime+i*fiveMinutes;
+//				long end = start + fiveMinutes;
+//				Date localStartDate = new Date(start);
+//				DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
+//				String timeLabel = format.format(localStartDate);
+//				
+//				long money = 0l;
+//				Set<TypedTuple<String>> timeline = giftRepositoryRedisImpl.givingsTimeOriented(start, end);
+//				Pattern pattern = Pattern.compile(".*?:\\d*:(\\d*).*");
+//				money = timeline.stream().map(tuple->tuple.getValue()).map(giving->{
+//					Matcher matcher = pattern.matcher(giving);
+//					if(matcher.matches()){
+//						return matcher.group(1);
+//					}
+//					return null;
+//				}).filter(gid->gid!=null)
+//				.mapToLong(gid->Long.parseLong(gid))
+//				.map(gid->giftRepositoryRedisImpl.getGiftPrice(gid))
+//				.reduce(0, (l1, l2)->l1+l2);
+//				
+//				timeLineBarChart.update(money, timeLabel);
+//			}
+//		});
+//		miner.start();
+//		return miner;
+//	}
+	@Bean 
+	public ThreadPoolExecutor threadPoolExecutor(){
+		return new ThreadPoolExecutor(10, 20, 3600l, TimeUnit.SECONDS, new LinkedTransferQueue<>());
+	}
+	
+	
 	@Bean
 	public Thread workingThread() {
 		Thread worker = new Thread(() -> {
@@ -46,12 +121,17 @@ public class GiftHandlerApplication {
 				Map<String, String> map = parseMessage(message);
 				if (map != null) {
 					SmallGift smallGift = SmallGift.getInstance(map);
-					audienceRedisRepository.moneyAdd(smallGift);
-					String display = smallGift.toString();
-					redisMQ.messageDisplay(display);
+					
+					
+					giftRepositoryRedisImpl.receive(smallGift.getUid(),smallGift.getGfid(), new Date().getTime(), smallGift.getNn());
+					if(smallGift.getGfid()==196){
+						rocketBarChart.update(smallGift.getUid(), smallGift.getNn());
+					}
+					//String display = smallGift.toString();
+					//redisMQ.messageDisplay(display);
 					try {
-						if (display != null)
-							webSocket.convertAndSend("/topic/greetings", new Greeting(display));
+						//if (display != null)
+						//	webSocket.convertAndSend("/topic/greetings", new Greeting(display));
 					} catch (NullPointerException ue) {
 						// do nothing
 					}
@@ -91,8 +171,8 @@ public class GiftHandlerApplication {
    public class MyRunner implements CommandLineRunner {
 		@Override
 		public void run(String ... args) throws Exception{
-				//connect(clientSocket);
+				threadPoolExecutor.execute(new DataMinor(1499860800000l, 1499889600000l, -1, giftRepositoryRedisImpl, chartService));
+				
 		}
    }
-   	
 }

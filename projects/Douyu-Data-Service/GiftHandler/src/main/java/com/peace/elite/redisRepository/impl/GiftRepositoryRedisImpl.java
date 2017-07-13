@@ -302,4 +302,10 @@ public class GiftRepositoryRedisImpl implements GiftRepository {
 		}
 		return name;		
 	}
+
+	@Override
+	public String getUserName(long uid) {
+		// TODO Auto-generated method stub
+		return getUserName(USER(uid));
+	}
 }

@@ -82,7 +82,7 @@ public class GiftRepository_RankTest {
 		hashOperations = template.opsForHash();
 		testData = new LinkedList<>();
 
-		template.keys("douyu-db:*").stream().forEach(key -> {
+		template.keys("douyu-db-test:*").stream().forEach(key -> {
 			template.delete(key);
 		});
 		Random random = new Random();
@@ -144,7 +144,7 @@ public class GiftRepository_RankTest {
 	
 	@Test 
 	public void getKeyUserByNameDontWorkTooSlow(){
-		template.keys("douyu-db:*").stream().forEach(key -> {
+		template.keys("douyu-db-test:*").stream().forEach(key -> {
 			template.delete(key);
 		});
 		Random random = new Random();
@@ -171,7 +171,7 @@ public class GiftRepository_RankTest {
 	
 	@Test
 	public void givingsTimeOrientedReturnGivingsInReverseTimeOrder(){
-		template.keys("douyu-db:*").stream().forEach(key -> {
+		template.keys("douyu-db-test:*").stream().forEach(key -> {
 			template.delete(key);
 		});
 		Random random = new Random();
