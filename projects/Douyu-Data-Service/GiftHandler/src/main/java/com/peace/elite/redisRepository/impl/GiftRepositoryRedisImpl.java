@@ -7,6 +7,7 @@ import static com.peace.elite.redisRepository.impl.GiftRepositoryRedisImpl.USERS
 
 
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
@@ -20,6 +21,9 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Repository;
 
+import com.peace.elite.GiftHandlerApplication.ReceivingEventFactory;
+import com.peace.elite.entities.SmallGift;
+import com.peace.elite.eventListener.Event;
 import com.peace.elite.redisRepository.GiftRepository;
 
 import lombok.Synchronized;
@@ -27,6 +31,9 @@ import lombok.Synchronized;
 @Repository
 public class GiftRepositoryRedisImpl implements GiftRepository {
 
+	@Autowired
+	private ReceivingEventFactory receivingEventFactory;
+	
 	public final static String GLOBAL_PREFIX = "douyu-db:";
 	public final static String DELIMITER = ":";
 	public static String GIVINGS_TIME_LINE;
@@ -79,6 +86,7 @@ public class GiftRepositoryRedisImpl implements GiftRepository {
 		hashOperations = stringRedisTemplate.opsForHash();
 		zetOperations = stringRedisTemplate.opsForZSet();
 		valueOperations = stringRedisTemplate.opsForValue();
+		receivingEventFactory.register(this);
 	}
 
 	@Override
@@ -106,11 +114,16 @@ public class GiftRepositoryRedisImpl implements GiftRepository {
 
 		valueOperations.increment(keyGiving, 1l);
 		zetOperations.incrementScore(GIVINGS_TIME_LINE, keyGiving + ":" + countGiving, timeStamp);
-
 		zetOperations.incrementScore(USERS_GIFT_RANK(gid), keyUser, (double) 1);
 		valueOperations.increment(COUNT_GIFT(gid), 1l);
 
 		stringRedisTemplate.exec();
+		
+//		if(zetOperations.score(GIVINGS_TIME_LINE, keyGiving + ":" + countGiving)>1500001462000l*1.01){
+//			System.out.println(keyGiving + ":" + countGiving+":"+timeStamp);
+//			throw new RuntimeException();
+//		}
+		
 		
 	}
 
@@ -307,5 +320,15 @@ public class GiftRepositoryRedisImpl implements GiftRepository {
 	public String getUserName(long uid) {
 		// TODO Auto-generated method stub
 		return getUserName(USER(uid));
+	}
+
+	@Override
+	public void handle(Event<SmallGift> e) {
+		// TODO Auto-generated method stub
+		long uid = e.getData().getUid();
+		long gid = e.getData().getGfid();
+		long timeStamp = new Date().getTime();
+		String valueUserName = e.getData().getNn();
+		this.receive(uid, gid, timeStamp, valueUserName);
 	}
 }

@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
+import com.peace.elite.GiftHandlerApplication.ReceivingEventFactory;
 import com.peace.elite.entities.ChartEntry2D;
 
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class ChartDataServiceFor2DimensionalCharts {
 	} 
 	@Autowired
 	SimpMessagingTemplate webSocket;
-	
+
 	@PostConstruct
 	public void init(){
 		data = new ArrayList<>();
@@ -48,6 +49,7 @@ public class ChartDataServiceFor2DimensionalCharts {
 	public void update(ChartEntry2D entry){
 		ChartUpdateData2D updateData;
 		int index = data.indexOf(entry);
+		System.out.println(index);
 		if(index == -1){
 			data.add(entry);
 			index = data.indexOf(entry);
@@ -57,8 +59,8 @@ public class ChartDataServiceFor2DimensionalCharts {
 		}
 		updateData = new ChartUpdateData2D(index, entry.getLabel(), entry.getData());
 		webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL, updateData);
-		Collections.sort(this.data);
-    	Collections.reverse(this.data);
+		//Collections.sort(this.data);
+    	//Collections.reverse(this.data);
 	}
 	public void update(String label, long id){
 		if(label == null || label.isEmpty()){
@@ -83,7 +85,7 @@ public class ChartDataServiceFor2DimensionalCharts {
     @MessageMapping("/2-dimensional/generic/init")
     @SendTo(WEB_SOCKET_PUBLISH_CHANNEL+"/init")
 	public ChartData2D sendInitData(){
-		return getCategorizedData();
+		return getChartData();//getCategorizedData();
 	}
     
     private long delta(int i, int j){

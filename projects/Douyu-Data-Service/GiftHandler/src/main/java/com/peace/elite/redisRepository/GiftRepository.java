@@ -4,8 +4,10 @@ import java.util.Set;
 
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Repository;
+import com.peace.elite.entities.SmallGift;
+import com.peace.elite.eventListener.Listener;
 
-public interface GiftRepository {
+public interface GiftRepository extends Listener<SmallGift> {
 	//1. 
 	//void receive(String keyUser, String keyGift, long timeStamp, String userName);
 	void receive(long uid, long gid, long timeStamp, String valueUserName);

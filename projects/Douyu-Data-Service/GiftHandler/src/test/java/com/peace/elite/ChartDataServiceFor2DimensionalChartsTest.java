@@ -31,10 +31,10 @@ public class ChartDataServiceFor2DimensionalChartsTest {
 	private ChartDataServiceFor2DimensionalCharts chartService;
 	
 	private ChartData2D chartData2D;
-	private Set<Long> uidSet;
+	private Set<String> nameSet;
 	@Before
 	public void init(){
-		uidSet = new HashSet<>();
+		nameSet = new HashSet<>();
 		
 		Random random = new Random();
 		final int UPDATES = 1000;
@@ -42,9 +42,11 @@ public class ChartDataServiceFor2DimensionalChartsTest {
 		IntStream.range(0, UPDATES).forEach(i-> {
 			long uid = random.nextInt(USERS);
 			chartService.update(new ChartEntry2D(1l, "User "+uid, uid+""));
-			uidSet.add(uid);
+			nameSet.add("User "+uid);
 		});
 		chartData2D = chartService.sendInitData();
+		Arrays.stream(chartData2D.getData()).forEach(System.out::println);
+		Arrays.stream(chartData2D.getLabels()).forEach(System.out::println);
 		//1000 updates for 100 users
 	}
 	@After
@@ -73,7 +75,7 @@ public class ChartDataServiceFor2DimensionalChartsTest {
 		return result;
 	}
 	@Test
-	public void setNameByIndexOfUid(){
+	public void updateWillUpdateName(){
 		chartService.update("No.10", 10l);
 		ChartData2D updatedChartData = chartService.sendInitData();
 		
@@ -104,10 +106,10 @@ public class ChartDataServiceFor2DimensionalChartsTest {
 	}
 	@Test
 	public void keepAllReferedUsers(){
-		for(Long uid:chartData2D.getData()){
-			assertTrue(uidSet.contains(uid));
+		for(String name:chartData2D.getLabels()){
+			assertTrue(nameSet.contains(name));
 		}
-		assertTrue(uidSet.size() == chartData2D.getData().length);
+		assertTrue(nameSet.size() == chartData2D.getLabels().length);
 	}
 	
 }

@@ -14,8 +14,11 @@ import org.springframework.stereotype.Component;
 
 import com.peace.elite.entities.DouyuMessageType;
 import com.peace.elite.entities.SmallGift;
+import com.peace.elite.eventListener.Event;
+import com.peace.elite.eventListener.EventFactory;
 import com.peace.elite.redisMQ.RedisMQ;
 import com.peace.elite.redisRepository.AudienceRedisRepository;
+import com.peace.elite.redisRepository.GiftRepository;
 import com.peace.elite.redisRepository.impl.GiftRepositoryRedisImpl;
 
 import org.springframework.boot.CommandLineRunner;
@@ -37,7 +40,7 @@ public class GiftHandlerApplication {
 
 	public Instant lastHeartBeat = Instant.now();
 	@Autowired
-	GiftRepositoryRedisImpl giftRepositoryRedisImpl;
+	GiftRepository giftRepository;
 	@Autowired
 	RedisMQ redisMQ;
 	@Autowired
@@ -50,11 +53,19 @@ public class GiftHandlerApplication {
 	private ThreadPoolExecutor threadPoolExecutor;
 	@Autowired
 	private ChartDataServiceFor2DimensionalCharts chartService;
+	@Autowired
+	private ReceivingEventFactory receivingEventFactory;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(GiftHandlerApplication.class, args);
 	}
 	
+	@Bean ReceivingEventFactory receivingEventFactory(){
+		return new ReceivingEventFactory();
+	}
+	
+	public class ReceivingEventFactory extends EventFactory<SmallGift>{
+	}
 	
 //	@Bean 
 //	public Thread testThread(){
@@ -122,16 +133,15 @@ public class GiftHandlerApplication {
 				if (map != null) {
 					SmallGift smallGift = SmallGift.getInstance(map);
 					
-					
-					giftRepositoryRedisImpl.receive(smallGift.getUid(),smallGift.getGfid(), new Date().getTime(), smallGift.getNn());
+					receivingEventFactory.publish(new Event<SmallGift>(smallGift));
 					if(smallGift.getGfid()==196){
 						rocketBarChart.update(smallGift.getUid(), smallGift.getNn());
 					}
-					//String display = smallGift.toString();
-					//redisMQ.messageDisplay(display);
+					String display = smallGift.toString();
+					redisMQ.messageDisplay(display);
 					try {
-						//if (display != null)
-						//	webSocket.convertAndSend("/topic/greetings", new Greeting(display));
+						if (display != null)
+							webSocket.convertAndSend("/topic/greetings", new Greeting(display));
 					} catch (NullPointerException ue) {
 						// do nothing
 					}
@@ -171,7 +181,7 @@ public class GiftHandlerApplication {
    public class MyRunner implements CommandLineRunner {
 		@Override
 		public void run(String ... args) throws Exception{
-				threadPoolExecutor.execute(new DataMinor(1499860800000l, 1499889600000l, -1, giftRepositoryRedisImpl, chartService));
+				threadPoolExecutor.execute(new DataMinor(1499860800000l, 1499889600000l, -1, giftRepository, chartService));
 				
 		}
    }
