@@ -1,18 +1,27 @@
 package com.peace.elite.entities;
 
+import java.util.Random;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class ChartEntry2D implements Comparable<ChartEntry2D> {
 
-	private Long data;
-	private String label;
-	private String id;//helper
-
+	private static Random random = new Random();
+	protected Long data;
+	protected String label;
+	protected String id;//helper
+	protected Long[] color = new Long[]{(long)random.nextInt(255), (long)random.nextInt(255), (long)random.nextInt(255)};
+	public ChartEntry2D(Long data, String label, String id){
+		this.data=data;
+		this.label=label;
+		this.id=id;
+	}
+	
 	@Override
 	public int compareTo(ChartEntry2D o) {
 		// TODO Auto-generated method stub

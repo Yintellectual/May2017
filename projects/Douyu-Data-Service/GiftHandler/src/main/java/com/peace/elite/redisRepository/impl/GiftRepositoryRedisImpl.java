@@ -1,13 +1,16 @@
 package com.peace.elite.redisRepository.impl;
 
 import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.peace.elite.redisRepository.impl.GiftRepositoryRedisImpl.USERS_GIFT_RANK_TOTAL;
 
-
+import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -22,6 +25,7 @@ import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Repository;
 
 import com.peace.elite.GiftHandlerApplication.ReceivingEventFactory;
+import com.peace.elite.entities.Giving;
 import com.peace.elite.entities.SmallGift;
 import com.peace.elite.eventListener.Event;
 import com.peace.elite.redisRepository.GiftRepository;
@@ -29,8 +33,9 @@ import com.peace.elite.redisRepository.GiftRepository;
 import lombok.Synchronized;
 
 @Repository
-public class GiftRepositoryRedisImpl implements GiftRepository {
+public class GiftRepositoryRedisImpl extends GiftRepository {
 
+	
 	@Autowired
 	private ReceivingEventFactory receivingEventFactory;
 	
@@ -208,113 +213,7 @@ public class GiftRepositoryRedisImpl implements GiftRepository {
 		return getCountGift(COUNT_GIFT(gid));
 	}
 
-	public long getGiftPrice(long gid){
-		long amount_in_cents;
-		switch((int)gid){
-		//办卡
-		case 924:
-			amount_in_cents = 60;
-			break;
-		//猫耳 0.2
-		case 529:
-			amount_in_cents = 2;
-			 break;
-		//荧光棒
-		case 824:
-			amount_in_cents = 1;
-			break;
-		
-		//弱鸡
-		case 193:
-			amount_in_cents = 2;
-			break;
-		//怂
-		case 713:
-			amount_in_cents = 1;
-			break;
-		//赞
-		case 192:
-			amount_in_cents = 1;
-			break;
-		//呵呵
-		case 519:
-			amount_in_cents = 1;
-			break;
-		
-	    //稳 
-		case 520:
-			amount_in_cents = 1;
-			break;
-		//双马尾 0.1
-		case 918:
-			amount_in_cents = 1;
-			 break;
-		case 195:
-			amount_in_cents = 1000;
-			break;
-		case 196:
-			amount_in_cents = 5000;
-			break;
-		default: 
-			amount_in_cents =0;
-			break;
-		}
-		return amount_in_cents;
-	}
 
-	public String getGiftName(long gid) {
-		String name;
-		switch((int)gid){
-		//办卡
-		case 924:
-			name = "办卡";
-			break;
-		//猫耳 0.2
-		case 529:
-			name = "猫耳";
-			 break;
-		//荧光棒
-		case 824:
-			name = "荧光棒";
-			break;
-		
-		//弱鸡
-		case 193:
-			name = "弱鸡";
-			break;
-		//怂
-		case 713:
-			name = "怂";
-			break;
-		//赞
-		case 192:
-			name = "赞";
-			break;
-		//呵呵
-		case 519:
-			name = "呵呵";
-			break;
-		
-	    //稳 
-		case 520:
-			name = "稳";
-			break;
-		//双马尾 0.1
-		case 918:
-			name = "双马尾";
-			break;
-		case 195:
-			name = "飞机";
-			break;
-		case 196:
-			name = "火箭";
-			break;
-		default: 
-			name = "礼物编号"+gid;
-			break;
-		}
-		return name;		
-	}
 
 	@Override
 	public String getUserName(long uid) {

@@ -53,14 +53,14 @@ public class ChartDataServiceFor2DimensionalChartsTest {
 	public void cleanUp(){
 		chartService.reset();
 	}
-	@Test
-	public void setNameAsUnknowIfNameIsNullOrEmpty(){
-		chartService.update(null, 111l);
-		ChartData2D updatedChartData = chartService.sendInitData();
-	
-		assertTrue("\nbefore: "+chartData2D.getLabels()+"\nafter: "+updatedChartData.getLabels(),
-				contains(updatedChartData.getLabels(), "匿名\\d*"));
-	}
+//	@Test
+//	public void setNameAsUnknowIfNameIsNullOrEmpty(){
+//		chartService.update(null, 111l);
+//		ChartData2D updatedChartData = chartService.sendInitData();
+//	
+//		assertTrue("\nbefore: "+chartData2D.getLabels()+"\nafter: "+updatedChartData.getLabels(),
+//				contains(updatedChartData.getLabels(), "匿名\\d*"));
+//	}
 	
 	private boolean contains(String[] arr, String regex){
 		boolean result = false;
@@ -74,36 +74,36 @@ public class ChartDataServiceFor2DimensionalChartsTest {
 		}
 		return result;
 	}
-	@Test
-	public void updateWillUpdateName(){
-		chartService.update("No.10", 10l);
-		ChartData2D updatedChartData = chartService.sendInitData();
-		
-		assertTrue("\nbefore: "+chartData2D.getLabels()+"\nafter: "+updatedChartData.getLabels(),
-				contains(updatedChartData.getLabels(), "No.10"));
-		assertTrue("\nbefore: "+chartData2D.getLabels()+"\nafter: "+updatedChartData.getLabels(),
-				!contains(updatedChartData.getLabels(), "User 10"));
-		
-	}
-	private long sum(Long[] arr){
-		return Arrays.stream(arr).reduce(0l, ((l1,l2)->l1+l2));
-	}
-	@Test
-	public void incrCounterOnceByOne(){
-		chartService.update("No.10", 10l);
-		ChartData2D updatedChartData = chartService.sendInitData();
-		
-		assertTrue(sum(chartData2D.getData())==1000l);
-		assertTrue(sum(updatedChartData.getData())==1001l);
-	}
-	@Test 
-	public void countupByIndexOfUid(){
-		chartService.update("User 200", 200l);
-		ChartData2D updatedChartData = chartService.sendInitData();
-		
-		assertTrue(updatedChartData.getData()[updatedChartData.getData().length-1]==1l);
-		assertTrue(updatedChartData.getLabels()[updatedChartData.getLabels().length-1].equals("User 200"));
-	}
+//	@Test
+//	public void updateWillUpdateName(){
+//		chartService.update("No.10", 10l);
+//		ChartData2D updatedChartData = chartService.sendInitData();
+//		
+//		assertTrue("\nbefore: "+chartData2D.getLabels()+"\nafter: "+updatedChartData.getLabels(),
+//				contains(updatedChartData.getLabels(), "No.10"));
+//		assertTrue("\nbefore: "+chartData2D.getLabels()+"\nafter: "+updatedChartData.getLabels(),
+//				!contains(updatedChartData.getLabels(), "User 10"));
+//		
+//	}
+//	private long sum(Long[] arr){
+//		return Arrays.stream(arr).reduce(0l, ((l1,l2)->l1+l2));
+//	}
+//	@Test
+//	public void incrCounterOnceByOne(){
+//		chartService.update("No.10", 10l);
+//		ChartData2D updatedChartData = chartService.sendInitData();
+//		
+//		assertTrue(sum(chartData2D.getData())==1000l);
+//		assertTrue(sum(updatedChartData.getData())==1001l);
+//	}
+//	@Test 
+//	public void countupByIndexOfUid(){
+//		chartService.update("User 200", 200l);
+//		ChartData2D updatedChartData = chartService.sendInitData();
+//		
+//		assertTrue(updatedChartData.getData()[updatedChartData.getData().length-1]==1l);
+//		assertTrue(updatedChartData.getLabels()[updatedChartData.getLabels().length-1].equals("User 200"));
+//	}
 	@Test
 	public void keepAllReferedUsers(){
 		for(String name:chartData2D.getLabels()){

@@ -21,19 +21,13 @@ function connect() {
 			showGreeting(JSON.parse(greeting.body).content);
 		});
 		stompClient.subscribe('/topic/2-dimensional/generic/init', function(init) {
-			alert(init);
+
 			var initJSON = $.parseJSON(init.body);
 			init = initJSON;
-			// alert(initJSON.labels);
-			// alert(init.data);
 			drawBarChart(init);
 		});
 		stompClient.subscribe('/topic/2-dimensional/generic/update', function(update) {
-			// alert(update);
 			var updateJSON = $.parseJSON(update.body);
-			// alert(updateJSON.index);
-			// alert(updateJSON.name);
-			// alert(updateJSON.counter);
 			updateBarChart(updateJSON);
 		});
 		console.log('open');
@@ -42,8 +36,9 @@ function connect() {
 }
 function updateBarChart(updateJSON){
 	var index = updateJSON.index;
-	myChart.data.labels[index] = updateJSON.name;
-	myChart.data.datasets[0].data[index] = updateJSON.counter;
+	myChart.data.labels[index] = updateJSON.label;
+	myChart.data.datasets[0].data[index] = updateJSON.data;
+	myChart.data.datasets[0].backgroundColor[index] = 'rgba('+updateJSON.color[0]+','+updateJSON.color[1]+','+updateJSON.color[2]+',1)';
 	myChart.update();
 }
 
@@ -60,8 +55,8 @@ function drawBarChart(init){
 	            data: init.data,
 	            borderWidth: 1,
 	            borderColor:'rgba(54, 162, 235, 1)',
-	            // backgroundColor:'rgba(0,0,0,0)',//'rgba(54, 162, 235, 1)',
-	            // hoverBackgroundColor:'rgba(75, 192, 192, 1)',
+	            backgroundColor:['rgba(0,0,0,0)'],//'rgba(54, 162, 235, 1)',
+	            hoverBackgroundColor:'rgba(75, 192, 192, 1)',
 		        hoverBorderColor:'rgba(75, 192, 192, 1)',
 		        hoverBorderWidth:2
 	        }],

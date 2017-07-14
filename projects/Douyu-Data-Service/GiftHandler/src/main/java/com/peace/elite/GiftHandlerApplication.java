@@ -11,16 +11,18 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
-
 import com.peace.elite.entities.DouyuMessageType;
+import com.peace.elite.entities.Giving;
 import com.peace.elite.entities.SmallGift;
 import com.peace.elite.eventListener.Event;
 import com.peace.elite.eventListener.EventFactory;
+import com.peace.elite.functionals.DynamicPartition2D;
+import com.peace.elite.functionals.Partitions2D;
+import com.peace.elite.functionals.UidPartitions;
 import com.peace.elite.redisMQ.RedisMQ;
 import com.peace.elite.redisRepository.AudienceRedisRepository;
 import com.peace.elite.redisRepository.GiftRepository;
 import com.peace.elite.redisRepository.impl.GiftRepositoryRedisImpl;
-
 import org.springframework.boot.CommandLineRunner;
 import java.util.*;
 import java.util.concurrent.LinkedTransferQueue;
@@ -55,75 +57,84 @@ public class GiftHandlerApplication {
 	private ChartDataServiceFor2DimensionalCharts chartService;
 	@Autowired
 	private ReceivingEventFactory receivingEventFactory;
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(GiftHandlerApplication.class, args);
 	}
-	
-	@Bean ReceivingEventFactory receivingEventFactory(){
+
+	@Bean
+	ReceivingEventFactory receivingEventFactory() {
 		return new ReceivingEventFactory();
 	}
-	
-	public class ReceivingEventFactory extends EventFactory<SmallGift>{
+
+	public class ReceivingEventFactory extends EventFactory<SmallGift> {
 	}
-	
-//	@Bean 
-//	public Thread testThread(){
-//		Thread test = new Thread(()->{
-//			
-//			
-//			Random random = new Random();
-//			final int UPDATES = 10000;
-//			final int USERS = 100;
-//			IntStream.range(0, UPDATES).forEach(l-> {
-//				long uid = random.nextInt(USERS);
-//				rocketBarChart.update(uid, "User "+uid);
-//				try{Thread.sleep(200);}catch(Exception e){}
-//			});
-//			
-//		});
-//		test.start();
-//		return test;
-//	}
-	
-//	@Bean
-//	public Thread dataMiningThread(){
-//		Thread miner = new Thread(()->{
-//			final long fiveMinutes = 300000l;
-//			final long startTime = 1499860800000l;
-//			for(int i=0;i<100;i++){
-//				long start = startTime+i*fiveMinutes;
-//				long end = start + fiveMinutes;
-//				Date localStartDate = new Date(start);
-//				DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
-//				String timeLabel = format.format(localStartDate);
-//				
-//				long money = 0l;
-//				Set<TypedTuple<String>> timeline = giftRepositoryRedisImpl.givingsTimeOriented(start, end);
-//				Pattern pattern = Pattern.compile(".*?:\\d*:(\\d*).*");
-//				money = timeline.stream().map(tuple->tuple.getValue()).map(giving->{
-//					Matcher matcher = pattern.matcher(giving);
-//					if(matcher.matches()){
-//						return matcher.group(1);
-//					}
-//					return null;
-//				}).filter(gid->gid!=null)
-//				.mapToLong(gid->Long.parseLong(gid))
-//				.map(gid->giftRepositoryRedisImpl.getGiftPrice(gid))
-//				.reduce(0, (l1, l2)->l1+l2);
-//				
-//				timeLineBarChart.update(money, timeLabel);
-//			}
-//		});
-//		miner.start();
-//		return miner;
-//	}
-	@Bean 
-	public ThreadPoolExecutor threadPoolExecutor(){
+
+	@Bean
+	public DynamicPartition2D<Giving> partition2d() {
+		DynamicPartition2D<Giving> bean = new DynamicPartition2D<>(giftRepository.hasUid, giftRepository.sumOfPrices,
+				(giving) -> giving.getUserName(), (giving) -> "" + giving.getUid(), (giving) -> giving);
+		receivingEventFactory.register(bean);
+		return bean;
+	}
+
+	// @Bean
+	// public Thread testThread(){
+	// Thread test = new Thread(()->{
+	//
+	//
+	// Random random = new Random();
+	// final int UPDATES = 10000;
+	// final int USERS = 100;
+	// IntStream.range(0, UPDATES).forEach(l-> {
+	// long uid = random.nextInt(USERS);
+	// rocketBarChart.update(uid, "User "+uid);
+	// try{Thread.sleep(200);}catch(Exception e){}
+	// });
+	//
+	// });
+	// test.start();
+	// return test;
+	// }
+
+	// @Bean
+	// public Thread dataMiningThread(){
+	// Thread miner = new Thread(()->{
+	// final long fiveMinutes = 300000l;
+	// final long startTime = 1499860800000l;
+	// for(int i=0;i<100;i++){
+	// long start = startTime+i*fiveMinutes;
+	// long end = start + fiveMinutes;
+	// Date localStartDate = new Date(start);
+	// DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
+	// String timeLabel = format.format(localStartDate);
+	//
+	// long money = 0l;
+	// Set<TypedTuple<String>> timeline =
+	// giftRepositoryRedisImpl.givingsTimeOriented(start, end);
+	// Pattern pattern = Pattern.compile(".*?:\\d*:(\\d*).*");
+	// money = timeline.stream().map(tuple->tuple.getValue()).map(giving->{
+	// Matcher matcher = pattern.matcher(giving);
+	// if(matcher.matches()){
+	// return matcher.group(1);
+	// }
+	// return null;
+	// }).filter(gid->gid!=null)
+	// .mapToLong(gid->Long.parseLong(gid))
+	// .map(gid->giftRepositoryRedisImpl.getGiftPrice(gid))
+	// .reduce(0, (l1, l2)->l1+l2);
+	//
+	// timeLineBarChart.update(money, timeLabel);
+	// }
+	// });
+	// miner.start();
+	// return miner;
+	// }
+	@Bean
+	public ThreadPoolExecutor threadPoolExecutor() {
 		return new ThreadPoolExecutor(10, 20, 3600l, TimeUnit.SECONDS, new LinkedTransferQueue<>());
 	}
-	
-	
+
 	@Bean
 	public Thread workingThread() {
 		Thread worker = new Thread(() -> {
@@ -132,9 +143,9 @@ public class GiftHandlerApplication {
 				Map<String, String> map = parseMessage(message);
 				if (map != null) {
 					SmallGift smallGift = SmallGift.getInstance(map);
-					
+
 					receivingEventFactory.publish(new Event<SmallGift>(smallGift));
-					if(smallGift.getGfid()==196){
+					if (smallGift.getGfid() == 196) {
 						rocketBarChart.update(smallGift.getUid(), smallGift.getNn());
 					}
 					String display = smallGift.toString();
@@ -153,7 +164,7 @@ public class GiftHandlerApplication {
 	}
 
 	public Map<String, String> parseMessage(String message) {
-		if(!message.contains("dw@=1")){
+		if (!message.contains("dw@=1")) {
 			System.out.println(message);
 			return null;
 		}
@@ -175,14 +186,17 @@ public class GiftHandlerApplication {
 			}
 		}
 		return protocal;
-	}	
+	}
 
-   @Component
-   public class MyRunner implements CommandLineRunner {
+	@Component
+	public class MyRunner implements CommandLineRunner {
 		@Override
-		public void run(String ... args) throws Exception{
-				threadPoolExecutor.execute(new DataMinor(1499860800000l, 1499889600000l, -1, giftRepository, chartService));
-				
+		public void run(String... args) throws Exception {
+//			threadPoolExecutor.execute(() -> {
+//
+//				partitions.partition(new Giving(uid, gid, timeStamp, valueUserName));
+//				chartService.setData(partitions.getData());
+//			});
 		}
-   }
+	}
 }
