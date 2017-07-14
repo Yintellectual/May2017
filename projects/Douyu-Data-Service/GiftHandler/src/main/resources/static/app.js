@@ -56,13 +56,16 @@ function drawBarChart(init){
 	            borderWidth: 1,
 	            borderColor:'rgba(54, 162, 235, 1)',
 	            backgroundColor:['rgba(0,0,0,0)'],//'rgba(54, 162, 235, 1)',
-	            hoverBackgroundColor:'rgba(75, 192, 192, 1)',
-		        hoverBorderColor:'rgba(75, 192, 192, 1)',
-		        hoverBorderWidth:2
+	            //hoverBackgroundColor:'rgba(75, 192, 192, 1)',
+		        //hoverBorderColor:'rgba(75, 192, 192, 1)',
+		        hoverBorderWidth:1
 	        }],
 	    },
 	    options: {
-	        animation:{
+	        legend:{
+	        	display:false
+	        },
+	    	animation:{
 	        	duration: 150,
 	    		easing: 'linear'
 	        }
