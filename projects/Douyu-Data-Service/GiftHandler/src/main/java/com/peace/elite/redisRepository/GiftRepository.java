@@ -2,6 +2,7 @@ package com.peace.elite.redisRepository;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiPredicate;
@@ -14,9 +15,13 @@ import com.peace.elite.entities.Giving;
 import com.peace.elite.entities.SmallGift;
 import com.peace.elite.eventListener.Listener;
 
-public abstract class GiftRepository implements Listener<SmallGift> {
-	public static Function<List<Giving>, Long> sumOfPrices = (givings) -> givings.stream().map(giving -> giving.getGid())
-			.mapToLong(gid -> getGiftPrice(gid)).reduce(0, (p1, p2) -> p1 + p2);
+public abstract class GiftRepository implements Listener<Giving> {
+	public static Function<Giving, Long> sumOfPrices = (g) -> {
+		return getGiftPrice(g.getGid());
+	};
+	public static Function<Giving, Long> sumOfGids = (g) -> {
+		return g.getGid();
+	};
 	public static BiPredicate<Giving, Giving> hasUid = (giving, user) -> {
 		return user.getUid() ==giving.getUid();
 	};
@@ -54,6 +59,8 @@ public abstract class GiftRepository implements Listener<SmallGift> {
 	//1.6, store givings in string
 	public abstract String getCountGiving(String keyGiving);
 	public abstract String getCountGiving(long uid, long gid);
+	public abstract long getGivingUid(String keyGiving);
+	public abstract long getGivingGid(String keyGiving);
 	//1.7 also count giving
 	//void givingTimeLineUpdate(long timeStamp, String keyGiving);
 	//void givingTimeLineUpdate(long timeStamp, long gid, long uid);
@@ -110,7 +117,9 @@ public abstract class GiftRepository implements Listener<SmallGift> {
 		case 519:
 			amount_in_cents = 1;
 			break;
-		
+		case 956:
+			amount_in_cents = 1;
+			break;
 	    //稳 
 		case 520:
 			amount_in_cents = 1;
@@ -164,7 +173,9 @@ public abstract class GiftRepository implements Listener<SmallGift> {
 		case 519:
 			name = "呵呵";
 			break;
-		
+		case 956:
+			name = "打call";
+			break;
 	    //稳 
 		case 520:
 			name = "稳";

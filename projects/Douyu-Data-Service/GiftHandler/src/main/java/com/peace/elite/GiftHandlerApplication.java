@@ -16,9 +16,9 @@ import com.peace.elite.entities.Giving;
 import com.peace.elite.entities.SmallGift;
 import com.peace.elite.eventListener.Event;
 import com.peace.elite.eventListener.EventFactory;
-import com.peace.elite.functionals.DynamicPartition2D;
-import com.peace.elite.functionals.Partitions2D;
-import com.peace.elite.functionals.UidPartitions;
+import com.peace.elite.partition.DynamicPartition2D;
+import com.peace.elite.partition.Partitions2D;
+import com.peace.elite.partition.UidPartitions;
 import com.peace.elite.redisMQ.RedisMQ;
 import com.peace.elite.redisRepository.AudienceRedisRepository;
 import com.peace.elite.redisRepository.GiftRepository;
@@ -48,13 +48,7 @@ public class GiftHandlerApplication {
 	@Autowired
 	private SimpMessagingTemplate webSocket;
 	@Autowired
-	private RocketBarChart rocketBarChart;
-	@Autowired
-	private TimeLineBarChart timeLineBarChart;
-	@Autowired
 	private ThreadPoolExecutor threadPoolExecutor;
-	@Autowired
-	private ChartDataServiceFor2DimensionalCharts chartService;
 	@Autowired
 	private ReceivingEventFactory receivingEventFactory;
 
@@ -67,15 +61,7 @@ public class GiftHandlerApplication {
 		return new ReceivingEventFactory();
 	}
 
-	public class ReceivingEventFactory extends EventFactory<SmallGift> {
-	}
-
-	@Bean
-	public DynamicPartition2D<Giving> partition2d() {
-		DynamicPartition2D<Giving> bean = new DynamicPartition2D<>(giftRepository.hasUid, giftRepository.sumOfPrices,
-				(giving) -> giving.getUserName(), (giving) -> "" + giving.getUid(), (giving) -> giving);
-		receivingEventFactory.register(bean);
-		return bean;
+	public class ReceivingEventFactory extends EventFactory<Giving> {
 	}
 
 	// @Bean
@@ -143,11 +129,11 @@ public class GiftHandlerApplication {
 				Map<String, String> map = parseMessage(message);
 				if (map != null) {
 					SmallGift smallGift = SmallGift.getInstance(map);
-
-					receivingEventFactory.publish(new Event<SmallGift>(smallGift));
-					if (smallGift.getGfid() == 196) {
-						rocketBarChart.update(smallGift.getUid(), smallGift.getNn());
-					}
+					Giving giving = new Giving(smallGift.getUid(), smallGift.getGfid(), new Date().getTime(), smallGift.getNn());
+					receivingEventFactory.publish(new Event<Giving>(giving));
+					//if (smallGift.getGfid() == 196) {
+						//rocketBarChart.update(smallGift.getUid(), smallGift.getNn());
+					//}
 					String display = smallGift.toString();
 					redisMQ.messageDisplay(display);
 					try {

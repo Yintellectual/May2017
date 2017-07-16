@@ -2,6 +2,7 @@ package com.peace.elite;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -16,117 +17,102 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import com.peace.elite.GiftHandlerApplication.ReceivingEventFactory;
+import com.peace.elite.chartService.chartData.ChartData;
+import com.peace.elite.chartService.entity.ChartUpdateData2D;
 import com.peace.elite.entities.ChartEntry2D;
+import com.peace.elite.entities.Giving;
+import com.peace.elite.eventListener.Event;
+import com.peace.elite.eventListener.EventFactory;
+import com.peace.elite.eventListener.Listener;
+import com.peace.elite.partition.Partitions2D;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Synchronized;
 
-@Service
-@Controller
-public class ChartDataServiceFor2DimensionalCharts {
+@Data
+public class ChartDataServiceFor2DimensionalCharts extends EventFactory<Giving> implements ChartData<ChartEntry2D>, Listener<ChartEntry2D>{
 
 	private ArrayList<ChartEntry2D> data;
-	private final String WEB_SOCKET_PUBLISH_CHANNEL = "/topic/2-dimensional/generic";
-
+	private EventFactory<ChartEntry2D> partitions;
+	private String WEB_SOCKET_PUBLISH_CHANNEL;
+	private SimpMessagingTemplate webSocket;
 	
-	@Autowired
-	SimpMessagingTemplate webSocket;
-
-	@PostConstruct
-	public void init(){
+	public ChartDataServiceFor2DimensionalCharts(EventFactory<ChartEntry2D> partitions2d, String publishChannel, SimpMessagingTemplate webSocket){
 		data = new ArrayList<>();
+		this.partitions = partitions2d;
+		partitions.register(this);
+		WEB_SOCKET_PUBLISH_CHANNEL = publishChannel;
+		this.webSocket = webSocket;
 	}
-	
-	public void setData(ArrayList<ChartEntry2D> data) {
+
+	@Synchronized
+	public void setAndSend(ArrayList<ChartEntry2D> data) {
 		this.data = data;
 		webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL+"/init", getChartData());
 	}
 	
+	private ChartEntry2D clone(ChartEntry2D entry){
+		ChartEntry2D result = new ChartEntry2D(entry.getData(), entry.getLabel(), entry.getId());
+		result.setColor(entry.getColor());
+		return result;
+	}
 	//updates labels and data
 	@Synchronized
-	public void update(ChartEntry2D entry){
+	public void updateAndSend(ChartEntry2D e){
+		ChartEntry2D entry = clone(e);
 		ChartUpdateData2D updateData;
+		long increasement = entry.getData();
 		int index = data.indexOf(entry);
 		if(index == -1){
 			data.add(entry);
 			index = data.indexOf(entry);
 		}else{
+			long oldMoney = data.get(index).getData();
+			long newMoney = entry.getData();
+			increasement = newMoney-oldMoney;
+			System.out.println("\n\n\n\n\n\nincreasement("+increasement+") = newMoney("+newMoney+")-oldMoney("+oldMoney+");\n\n\n\n\n\n");
 			data.set(index, entry);
 		}
-		
-		
 		updateData = new ChartUpdateData2D(index, entry.getLabel(), entry.getData(), entry.getColor() );
 		webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL+"/update", updateData);
-		//Collections.sort(this.data);
-    	//Collections.reverse(this.data);
+		publish(new Event<Giving>(new Giving(Long.parseLong(entry.getId()), increasement, 0l, entry.getLabel())));
 	}
-	private ChartData2D getChartData(){
+	
+	public ChartData2D getChartData(){
 		return getChartData(data);
 	}    		    
-    private ChartData2D getChartData(ArrayList<ChartEntry2D> data){    	
-    	return new ChartData2D(
-    			data.stream().filter(e->e!=null).map(e->e.getLabel()).collect(Collectors.toList()).toArray(new String[data.size()]), 
-    			data.stream().filter(e->e!=null).map(e->e.getData()).collect(Collectors.toList()).toArray(new Long[data.size()]));
-    }
 	
-    @MessageMapping("/2-dimensional/generic/init")
-    @SendTo(WEB_SOCKET_PUBLISH_CHANNEL+"/init")
-	public ChartData2D sendInitData(){
-		return getChartData();
-	}
-//    
-//    private long delta(int i, int j){
-//    	return money(i)- money(j);
-//    }
-//    private long money(int i){
-//    	return data.get(i).getData();
-//    }
-//    private String categoryLabel(long money){
-//    	return "below "+ money;
-//    }
-//    private ChartEntry2D clone(int index){
-//    	return new ChartEntry2D(
-//				data.get(index).getData()
-//				,data.get(index).getLabel().contains("Below")? data.get(index).getLabel():categoryLabel(data.get(index).getData())
-//				,data.get(index).getLabel().contains("Below")? data.get(index).getLabel():categoryLabel(data.get(index).getData()));
-//    }
-//    public ChartData2D getCategorizedData(){
-//		ArrayList<ChartEntry2D> result = new ArrayList<>();
-//		ChartEntry2D currentColumn = clone(0);
-//    	for(int i=1;i<data.size();i++){
-//    		if(delta(i-1, i)>4*money(i)/10){
-//    			result.add(currentColumn);
-//    			currentColumn = clone(i);
-//    		}else{
-//    			currentColumn = currentColumn.addOn(data.get(i));
-//    		}
-//    	}
-//    	result.add(currentColumn);
-//    	this.data = result;
-//    	return getChartData(result);
-//    }
-//    
-    @MessageMapping("/2-dimensional/generic/sort")
-    @SendTo(WEB_SOCKET_PUBLISH_CHANNEL+"/sort")
-	public ChartData2D sortedDataAndSend(){
+    public void sort(){
     	Collections.sort(data);
     	Collections.reverse(data);
-		return getChartData();
 	}
+    public void sort(Comparator<ChartEntry2D> comparator){
+    	Collections.sort(data, comparator);
+    }
     
 	public void reset(){
-		init();
+		data = new ArrayList<>();
 	}
 	
-	@Data
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public class ChartUpdateData2D{
-		private long index;
-		private String label;
-		private long data;
-		private Long[] color;
+    public static ChartData2D getChartData(ArrayList<ChartEntry2D> data){    	
+    	return new ChartData2D(
+    			data.stream().filter(e->e!=null).map(e->e.getLabel()).collect(Collectors.toList()).toArray(new String[data.size()]), 
+    			data.stream().filter(e->e!=null).map(e->e.getData()).collect(Collectors.toList()).toArray(new Long[data.size()]),
+    			data.stream().filter(e->e!=null).map(e->e.getColor()).collect(Collectors.toList()).toArray(new String[data.size()]));
+		
+    }
+
+    public void useAsDataSource(){
+    	for(ChartEntry2D e:data){
+    		publish(new Event<Giving>(new Giving(Long.parseLong(e.getId()), e.getData(), 0l, e.getLabel())));
+    	}
+    }
+    
+	@Override
+	public void handle(Event<ChartEntry2D> e) {
+		// TODO Auto-generated method stub
+		updateAndSend(e.getData());
 	}
 }

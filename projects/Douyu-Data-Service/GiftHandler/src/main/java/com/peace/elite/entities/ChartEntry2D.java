@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class ChartEntry2D implements Comparable<ChartEntry2D> {
 
 	private static Random random = new Random();
-	protected Long data;
+	protected Long data = 0l;
 	protected String label;
 	protected String id;//helper
-	protected Long[] color = new Long[]{(long)random.nextInt(255), (long)random.nextInt(255), (long)random.nextInt(255)};
+	protected String color = "rgba("+(long)random.nextInt(255)+","+(long)random.nextInt(255)+","+(long)random.nextInt(255)+",1)";
 	public ChartEntry2D(Long data, String label, String id){
 		this.data=data;
 		this.label=label;
