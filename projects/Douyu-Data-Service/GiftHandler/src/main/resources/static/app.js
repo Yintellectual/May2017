@@ -1,5 +1,10 @@
 var stompClient = null;
-var myChart =null;
+var myChart0 =null;
+var ctx0 ;
+var myChart1 =null;
+var ctx1 ;
+var myChart2 =null;
+var ctx2 ;
 function setConnected(connected) {
 	$("#connect").prop("disabled", connected);
 	$("#disconnect").prop("disabled", !connected);
@@ -20,23 +25,45 @@ function connect() {
 		stompClient.subscribe('/topic/greetings', function(greeting) {
 			showGreeting(JSON.parse(greeting.body).content);
 		});
+		stompClient.subscribe('/topic/2-dimensional/user/init', function(init) {
+
+			var initJSON = $.parseJSON(init.body);
+			init = initJSON;
+			drawBarChart0(init);
+		});
+		stompClient.subscribe('/topic/2-dimensional/user/update', function(update) {
+			var updateJSON = $.parseJSON(update.body);
+			updateBarChart(myChart0, updateJSON);
+		});
+		stompClient.subscribe('/topic/2-dimensional/time/init', function(init) {
+
+			var initJSON = $.parseJSON(init.body);
+			init = initJSON;
+			drawBarChart1(init);
+		});
+		stompClient.subscribe('/topic/2-dimensional/time/update', function(update) {
+			var updateJSON = $.parseJSON(update.body);
+			updateBarChart(myChart1, updateJSON);
+		});
 		stompClient.subscribe('/topic/2-dimensional/generic/init', function(init) {
 
 			var initJSON = $.parseJSON(init.body);
 			init = initJSON;
-			drawBarChart(init);
+			drawBarChart2(init);
 		});
 		stompClient.subscribe('/topic/2-dimensional/generic/update', function(update) {
 			var updateJSON = $.parseJSON(update.body);
-			updateBarChart(updateJSON);
+			updateBarChart(myChart2, updateJSON);
 		});
 		console.log('open');
+		stompClient.send("/app/2-dimensional/user/init", {}, 'test');
+		stompClient.send("/app/2-dimensional/time/init", {}, 'test');
 		stompClient.send("/app/2-dimensional/generic/init", {}, 'test');
 	});
 }
 
 
-function updateBarChart(updateJSON){
+function updateBarChart(myChart, updateJSON){
 	var index = updateJSON.index;
 	
 	myChart.data.labels[index] = updateJSON.label;
@@ -44,10 +71,46 @@ function updateBarChart(updateJSON){
 	myChart.data.datasets[0].backgroundColor[index] = updateJSON.color;
 	myChart.update();
 }
+function drawBarChart0(init){
+	
+	myChart0 = new Chart(ctx0, {
+	    type: 'doughnut',
+	    data: {
+	        labels: init.labels,
+	        datasets: [{
+	        	label: '# of Votes',
+	            data: init.data,
+	            borderWidth: 1,
+	            borderColor:'rgba(13,190,152,0.7)',
+	            backgroundColor:init.color,//'rgba(54, 162, 235, 1)',
+	            //hoverBackgroundColor:'rgba(75, 192, 192, 1)',
+		        //hoverBorderColor:'rgba(75, 192, 192, 1)',
+		        hoverBorderWidth:1
+	        }],
+	    },
+	    options: {
+	        legend:{
+	        	display:false
+	        },
+	    	animation:{
+	        	duration: 150,
+	    		easing: 'linear'
+	        }
+// scales: {
+// xAxes: [{
+// stacked: true
+// }],
+// yAxes: [{
+// stacked: true
+// }]
+// }
+	    }
+	});
+}
 
-function drawBarChart(init){
-	var ctx = document.getElementById("myChart").getContext('2d');
-	myChart = new Chart(ctx, {
+function drawBarChart1(init){
+	
+	myChart1 = new Chart(ctx1, {
 	    type: 'bar',
 	    data: {
 	        labels: init.labels,
@@ -80,8 +143,52 @@ function drawBarChart(init){
 // }
 	    }
 	});
-
 }
+
+function drawBarChart2(init){
+	
+	myChart2 = new Chart(ctx2, {
+	    type: 'doughnut',
+	    data: {
+	        labels: init.labels,
+	        datasets: [{
+	        	label: '# of Votes',
+	            data: init.data,
+	            borderWidth: 1,
+	            borderColor:'rgba(54, 162, 235, 1)',
+	            backgroundColor:init.color,//'rgba(54, 162, 235, 1)',
+	            //hoverBackgroundColor:'rgba(75, 192, 192, 1)',
+		        //hoverBorderColor:'rgba(75, 192, 192, 1)',
+		        hoverBorderWidth:1
+	        }],
+	    },
+	    options: {
+	    	onClick:function(e, r){
+	    		alert(JSON.stringify(e));
+	    		alert(
+	    				this.active[0]._chart.config.data.labels[this.active[0]._index]//this.active[0]._chart.config.data.datasets[0].data[this.active[0]._index]//_index//_chart.config.data.datasets[0].backgroundColor
+	    		);
+	    	},
+	    	legend:{
+	        	display:false
+	        },
+	    	animation:{
+	        	duration: 150,
+	    		easing: 'linear'
+	        }
+// scales: {
+// xAxes: [{
+// stacked: true
+// }],
+// yAxes: [{
+// stacked: true
+// }]
+// }
+	    }
+	});
+	
+}
+
 
 function disconnect() {
 	if (stompClient != null) {
@@ -100,7 +207,7 @@ function sendName() {
 function showGreeting(message) {
 	$("#greetings").append("<tr><td>" + message + "</td></tr>");
 	window.scrollTo(0, document.body.scrollHeight);
-	ff();
+	//ff();
 }
 
 function ff() {
@@ -110,9 +217,10 @@ function ff() {
 	}
 }
 function init() {
+	ctx0 = document.getElementById("myChart0").getContext('2d');
+	ctx1 = document.getElementById("myChart1").getContext('2d');
+	ctx2 = document.getElementById("myChart2").getContext('2d');
 	connect();
-
-	
 }
 $(document).ready(function() {
 	init();
