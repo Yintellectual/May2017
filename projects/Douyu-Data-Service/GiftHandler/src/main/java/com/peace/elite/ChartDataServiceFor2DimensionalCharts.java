@@ -65,7 +65,7 @@ public class ChartDataServiceFor2DimensionalCharts extends ChartData<ChartEntry2
     public static ChartData2D getChartData(List<ChartEntry2D> data){    	
     	return new ChartData2D(
     			data.stream().filter(e->e!=null).map(e->e.getLabel()).collect(Collectors.toList()).toArray(new String[data.size()]), 
-    			data.stream().filter(e->e!=null).map(e->e.getData()/10).collect(Collectors.toList()).toArray(new Long[data.size()]),
+    			data.stream().filter(e->e!=null).map(e->e.getData()).collect(Collectors.toList()).toArray(new Long[data.size()]),
     			data.stream().filter(e->e!=null).map(e->e.getColor()).collect(Collectors.toList()).toArray(new String[data.size()]));
 		
     }
@@ -76,10 +76,11 @@ public class ChartDataServiceFor2DimensionalCharts extends ChartData<ChartEntry2
 	}
 
 	@Override
+	//@Synchronized
 	public void webSocketUpdate(int index, ChartEntry2D e) {
 		// TODO Auto-generated method stub
 		ChartUpdateData2D updateData;
-		updateData = new ChartUpdateData2D(index, e.getLabel(), e.getData()/10, e.getColor() );
+		updateData = new ChartUpdateData2D(index, e.getLabel(), e.getData(), e.getColor() );
 		webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL+"/update", updateData);
 	}
 	public void useAsDataSource(){

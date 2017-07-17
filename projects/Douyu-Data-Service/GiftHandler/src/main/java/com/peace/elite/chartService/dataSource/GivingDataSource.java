@@ -36,24 +36,26 @@ public class GivingDataSource extends EventFactory<Giving> implements Listener<G
 		if(timeInterval[1]==Long.MAX_VALUE){
 			receivingEventFactory.register(this);
 		}
+		Predicate<Giving> filter = (g)->true;
+		for(Predicate<Giving> f:filters){
+			filter = filter.and(f);
+		}
+		
 		Set<TypedTuple<String>> tuples = giftRepository.givingsTimeOriented(timeInterval[0], timeInterval[1]);
 		if(tuples.size()>1000){
-			tuples.parallelStream().map(tuple->recoverGiving(tuple)).map(g->new Event<Giving>(g)).forEach(e->handle(e));
+			tuples.parallelStream().map(tuple->recoverGiving(tuple)).filter(filter).map(g->new Event<Giving>(g)).forEach(e->publish(e));
 		}else{
-			tuples.stream().map(tuple->recoverGiving(tuple)).map(g->new Event<Giving>(g)).forEach(e->handle(e));
+			tuples.stream().map(tuple->recoverGiving(tuple)).filter(filter).map(g->new Event<Giving>(g)).forEach(e->publish(e));
 		}
 	}
 	@Override
 	public void handle(Event<Giving> e) {
 		// TODO Auto-generated method stub
-		boolean good = true;
-		for(Predicate<Giving> filter:filters){
-			if(!filter.test(e.getData())){
-				good = false;
-				break;
-			}
+		Predicate<Giving> filter = (g)->true;
+		for(Predicate<Giving> f:filters){
+			filter = filter.and(f);
 		}
-		if(good){
+		if(filter.test(e.getData())){
 			publish(e);
 		}
 	}

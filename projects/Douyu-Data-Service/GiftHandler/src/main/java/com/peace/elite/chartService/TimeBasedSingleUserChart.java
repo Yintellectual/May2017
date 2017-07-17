@@ -19,7 +19,6 @@ import com.peace.elite.ChartDataServiceFor2DimensionalCharts;
 import com.peace.elite.GiftHandlerApplication.ReceivingEventFactory;
 import com.peace.elite.chartService.chartData.ChartData;
 import com.peace.elite.chartService.dataSource.GivingDataSource;
-import com.peace.elite.chartService.entity.BoundaryWrapper;
 import com.peace.elite.chartService.entity.ExtendedCharEntry2D;
 import com.peace.elite.entities.ChartEntry2D;
 import com.peace.elite.entities.Giving;
@@ -27,13 +26,14 @@ import com.peace.elite.eventListener.EventFactory;
 import com.peace.elite.partition.Partition;
 import com.peace.elite.partition.Partitions2D;
 import com.peace.elite.redisRepository.GiftRepository;
+import com.peace.elite.chartService.entity.BoundaryWrapper;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Controller
-public class MoneyBasedGivingsBarChartService{
+public class TimeBasedSingleUserChart{
 
 	@Autowired
 	private SimpMessagingTemplate webSocket;
@@ -41,13 +41,13 @@ public class MoneyBasedGivingsBarChartService{
 	private GiftRepository giftRepository;
 	@Autowired
 	private ReceivingEventFactory receivingEventFactory;
-	
-	private final String WEB_SOCKET_APP_CHANNEL = "/2-dimensional/generic";
-	private final String WEB_SOCKET_PUBLISH_CHANNEL = "/topic/2-dimensional/generic";
+	 
+	private final String WEB_SOCKET_APP_CHANNEL = "/2-dimensional/time_based_single_user_chart";
+	private final String WEB_SOCKET_PUBLISH_CHANNEL = "/topic/2-dimensional/time_based_single_user_chart";
 	
 	private ChartData<ChartEntry2D, ChartEntry2D> chartData;
 	
-	public MoneyBasedGivingsBarChartService() {
+	public TimeBasedSingleUserChart() {
 	}
 	
 	private String generateGroupName(Long money){
@@ -56,112 +56,50 @@ public class MoneyBasedGivingsBarChartService{
 	private ChartEntry2D generateBoundary(long amount){
 		return new ChartEntry2D(amount, generateGroupName(amount), amount+"");
 	}
-
-	
 	
 
-	
+	private Long[] timeToTimeInterval(Long time, Long start, Long end, Long length){
+		Long[] result = new Long[2];
+		
+		long delta = (time - start)%length;
+		result[0] = time - delta;
+		result[1] = Math.min(end, result[0]+length); 
+		return result;
+	}
 	@PostConstruct
 	public void init() {
 		Long[] range = {new Long(1500206400000l),Long.MAX_VALUE};//,new Long(1500141600000l)};
+		Long length = 300000l;
 		GivingDataSource givingDataSource = new GivingDataSource(range, giftRepository, receivingEventFactory);
-		Partitions2D<Giving, ChartEntry2D, Giving> partitions1 = new Partitions2D<>(
+		givingDataSource.filters.add((g)->"玩战争游戏".equals(g.getUserName()));
+		Partitions2D<Giving, ChartEntry2D, BoundaryWrapper<Giving>> partitions = new Partitions2D<>( 
 				//predicate
-				GiftRepository.hasUid,
+				GiftRepository.withInTimeInterval,
 				//accumulate
-				(giving,entry)->{
+				(giving, entry)->{
+					Long[] timeInterval = timeToTimeInterval(giving.getTimeStamp(), new Long(1500206400000l),Long.MAX_VALUE, length);
 					if(entry==null){
-						return new ChartEntry2D(GiftRepository.getGiftPrice(giving.getGid()), giving.getUserName(), giving.getUid()+"");
+						return new ChartEntry2D(GiftRepository.getGiftPrice(giving.getGid()), GiftRepository.timeIntervalToLabel.apply(timeInterval), timeInterval[0]+"");
 					}else{
-						entry.increase(GiftRepository.getGiftPrice(giving.getGid()));
+						entry.increase(new Long(GiftRepository.getGiftPrice(giving.getGid())));
 						return entry;
 					}
 				},
 				//generateCriterion
-				(giving)->giving,
+				(giving)->{
+					BoundaryWrapper<Giving> result = new BoundaryWrapper<Giving>();
+					Long[] timeInterval = timeToTimeInterval(giving.getTimeStamp(), new Long(1500206400000l),Long.MAX_VALUE, length);
+					result.setFirst(new Giving(1l, 1l, timeInterval[0], GiftRepository.timeIntervalToLabel.apply(timeInterval)));
+					result.setSecond(new Giving(1l, 1l, timeInterval[1], GiftRepository.timeIntervalToLabel.apply(timeInterval)));
+					return result;
+				},
 				//dataSource
 				givingDataSource);
 		
-		
-		
-		ChartData<ChartEntry2D, ChartEntry2D> chartData1 = new ChartDataServiceFor2DimensionalCharts(partitions1, WEB_SOCKET_PUBLISH_CHANNEL, webSocket);
-		chartData1.setWEB_SOCKET_PUBLISH_CHANNEL("1");
-		Partitions2D<ChartEntry2D, ChartEntry2D, BoundaryWrapper<ChartEntry2D>> partitions = new Partitions2D<>(
-				//predicate
-				(e, b)->{
-					long money = e.getData();
-					if(money<0){
-						money *= -1;
-					}
-					String name = e.getLabel(); 
-					boolean result = false;
-					result = (name.equals(b.getSecond().getLabel()))
-							||(	(money<b.getSecond().getData())
-									&&
-								(money>=b.getFirst().getData()));
-					return result;
-				},
-				//accumulate
-				(e,entry)->{
-					if(entry==null){
-						long money = e.getData();
-						String name = e.getLabel();
-						String id = e.getId();
-						if(money<0){
-							//error
-						}if(money<100){
-							name = generateGroupName(100l);
-							id = 100+"";
-						}else if(money<1500){
-							name = generateGroupName(1500l);
-							id = 1500+"";
-						}else if(money<4000){
-							name = generateGroupName(4000l);
-							id = 4000+"";
-						}else{
-							
-						}
-						return new ChartEntry2D(money, name, id);
-					}else{
-						entry.increase(e.getData());
-						return entry;
-					}
-				},
-				//generateCriterion
-				(entry)->{
-					BoundaryWrapper<ChartEntry2D> result = new BoundaryWrapper<ChartEntry2D>();
-					long money = entry.getData();
-					
-					if(money<0){
-						//do nothing
-					}if(money<100l){
-						result.setFirst(generateBoundary(0l));
-						result.setSecond(generateBoundary(100l));
-					}else if(money<1500l){
-						result.setFirst(generateBoundary(100l));
-						result.setSecond(generateBoundary(1500l));
-					}else if(money<4000l){
-						result.setFirst(generateBoundary(1500l));
-						result.setSecond(generateBoundary(4000l));
-					}else{
-						result.setFirst(entry);
-						result.setSecond(entry);
-					}					
-					return result;
-				},
-				//dataSource
-				null
-				
-		);
-			
-
 		chartData = new ChartDataServiceFor2DimensionalCharts(partitions, WEB_SOCKET_PUBLISH_CHANNEL, webSocket);
 		Long start = new Date().getTime();
 		givingDataSource.start();
 		Long end1 = new Date().getTime();
-		partitions.setDataSource(chartData1);
-		chartData1.register(partitions);
-		chartData1.useAsDataSource();
 		Long end2 = new Date().getTime();
 		System.out.println("----------------------------------------------------------");
 		System.out.println("----------------------------------------------------------\n\n\n");
@@ -169,24 +107,17 @@ public class MoneyBasedGivingsBarChartService{
 		//System.out.println("phase 2: "+ (end2-end1));
 		System.out.println("----------------------------------------------------------");
 		System.out.println("----------------------------------------------------------");
-		Thread thread = new Thread(()->{
-			while(true){
-				try{Thread.sleep(3000);}catch(Exception e){}
-				for(Partition<ChartEntry2D, ChartEntry2D, BoundaryWrapper<ChartEntry2D>> p:partitions.getPartitions()){
-					p.getChartEntry().setData(0l);
-				}
-				chartData1.useAsDataSource();
-				webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL+"/init", chartData.getChartData());
-			}	
-		});
-		thread.start();
-		
+		//webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL+"/update", "dada");
 	}
+	
 	
     @MessageMapping(WEB_SOCKET_APP_CHANNEL+"/init")
     @SendTo(WEB_SOCKET_PUBLISH_CHANNEL+"/init")
 	public ChartData2D initRequestHandler(){
-    	chartData.sort();
+    	//init();
+    	chartData.sort((e1, e2)->{
+    		return e1.getId().compareTo(e2.getId());
+    	});;
     	return chartData.getChartData();
 	}
     

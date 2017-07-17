@@ -13,7 +13,7 @@ import lombok.Synchronized;
 public class ChartEntry2D implements Comparable<ChartEntry2D> {
 
 	private static Random random = new Random();
-	protected long data = 0;
+	protected AtomicLong data = new AtomicLong(0l);
 	
 	protected String label;
 	protected String id;//helper
@@ -25,21 +25,21 @@ public class ChartEntry2D implements Comparable<ChartEntry2D> {
 	}
 
 	public long getData(){
-		return data;
+		return data.get();
 	}
 	public void setData(long newValue){
-		this.data = newValue;
+		this.data.set(newValue);;
 	}
-	@Synchronized
+	
 	public void increase(Long amount){
-		data+=amount;
+		data.addAndGet(amount);
 	}
 	
 	
 	@Override
 	public int compareTo(ChartEntry2D o) {
 		// TODO Auto-generated method stub
-		return (int)(this.data - (o.getData()));
+		return (int)(this.data.get() - (o.getData()));
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ChartEntry2D implements Comparable<ChartEntry2D> {
 	
 	public ChartEntry2D clone(){
 		// TODO Auto-generated method stub
-		ChartEntry2D result = new ChartEntry2D(data, label, id);
+		ChartEntry2D result = new ChartEntry2D(data.get(), label, id);
 		result.setColor(color);
 		return result;
 	}

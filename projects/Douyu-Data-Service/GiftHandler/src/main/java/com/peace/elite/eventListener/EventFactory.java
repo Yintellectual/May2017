@@ -2,6 +2,11 @@ package com.peace.elite.eventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.peace.elite.redisRepository.GiftRepository;
 
 public class EventFactory<T>{
 	private List<Listener<T>> handlers = new ArrayList<>();

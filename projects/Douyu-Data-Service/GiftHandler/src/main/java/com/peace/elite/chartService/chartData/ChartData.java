@@ -29,23 +29,22 @@ public abstract class ChartData<CHART_ENTRY extends Comparable<CHART_ENTRY>, RAW
 	//updates labels and data
 	//@Synchronized
 	public void updateAndPublish(CHART_ENTRY entry) {
-		CHART_ENTRY e0 = null;
-		CHART_ENTRY e = clone(entry);
-		int index = chartEntries.indexOf(e);
-		if(index == -1){
-			chartEntries.add(e);
-			index = chartEntries.indexOf(e);
-			e0 = null;
-		}else{
-			e0 = chartEntries.get(index);
-			chartEntries.set(index, e);
+		int index = -1;
+		for(CHART_ENTRY e:chartEntries){
+			if(e==entry){
+				 index = chartEntries.indexOf(e);
+				 //minus the first one, and leave the second one be zero
+				 //publish(e,e);
+			}
 		}
-		
-		publish(e0,e);
-		webSocketUpdate(index, e);
+		if(index == -1){
+			chartEntries.add(entry);
+			index = chartEntries.indexOf(entry);
+		}
+		webSocketUpdate(index, entry);
 	}
 	
-	public abstract void publish(CHART_ENTRY e1,CHART_ENTRY e2);
+	public abstract void publish(CHART_ENTRY e1, CHART_ENTRY e2);
 	public abstract ChartData2D getChartData();	    
 	public abstract void webSocketUpdate(int index,CHART_ENTRY e);
 	public abstract CHART_ENTRY clone(CHART_ENTRY e);

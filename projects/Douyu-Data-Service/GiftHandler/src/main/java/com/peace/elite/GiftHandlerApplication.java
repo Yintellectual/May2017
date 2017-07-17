@@ -132,7 +132,7 @@ public class GiftHandlerApplication {
 					Giving giving = new Giving(smallGift.getUid(), smallGift.getGfid(), new Date().getTime(),
 							smallGift.getNn());
 					receivingEventFactory.publish(new Event<Giving>(giving));
-					if (smallGift.getGfid() == 196 || smallGift.getGfid() == 195) {
+//					if (smallGift.getGfid() == 196 || smallGift.getGfid() == 195) {
 						// rocketBarChart.update(smallGift.getUid(),
 						// smallGift.getNn());
 						String display = smallGift.toString();
@@ -144,7 +144,7 @@ public class GiftHandlerApplication {
 						} catch (NullPointerException ue) {
 							// do nothing
 						}
-					}
+//					}
 				}
 			}
 		});

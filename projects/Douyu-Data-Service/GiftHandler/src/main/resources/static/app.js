@@ -5,6 +5,11 @@ var myChart1 =null;
 var ctx1 ;
 var myChart2 =null;
 var ctx2 ;
+var myChart3 =null;
+var ctx3 ;
+
+var myChart5 =null;
+var ctx5 ;
 function setConnected(connected) {
 	$("#connect").prop("disabled", connected);
 	$("#disconnect").prop("disabled", !connected);
@@ -55,10 +60,21 @@ function connect() {
 			var updateJSON = $.parseJSON(update.body);
 			updateBarChart(myChart2, updateJSON);
 		});
+		stompClient.subscribe('/topic/2-dimensional/time_based_single_user_chart/init', function(init) {
+
+			var initJSON = $.parseJSON(init.body);
+			init = initJSON;
+			drawBarChart3(init);
+		});
+		stompClient.subscribe('/topic/2-dimensional/time_based_single_user_chart/update', function(update) {
+			var updateJSON = $.parseJSON(update.body);
+			updateBarChart(myChart3, updateJSON);
+		});
 		console.log('open');
 		stompClient.send("/app/2-dimensional/user/init", {}, 'test');
 		stompClient.send("/app/2-dimensional/time/init", {}, 'test');
 		stompClient.send("/app/2-dimensional/generic/init", {}, 'test');
+		stompClient.send("/app/2-dimensional/time_based_single_user_chart/init", {}, 'test');
 	});
 }
 
@@ -165,9 +181,11 @@ function drawBarChart2(init){
 	    options: {
 	    	onClick:function(e, r){
 	    		alert(JSON.stringify(e));
-	    		alert(
-	    				this.active[0]._chart.config.data.labels[this.active[0]._index]//this.active[0]._chart.config.data.datasets[0].data[this.active[0]._index]//_index//_chart.config.data.datasets[0].backgroundColor
-	    		);
+//	    		alert(
+//	    				this.active[0]._chart.config.data.labels[this.active[0]._index]//this.active[0]._chart.config.data.datasets[0].data[this.active[0]._index]//_index//_chart.config.data.datasets[0].backgroundColor
+//	    				
+//	    		);
+	    		stompClient.send("/app/2-dimensional/time_based_single_user_chart/init", {}, this.active[0]._chart.config.data.labels[this.active[0]._index]);
 	    	},
 	    	legend:{
 	        	display:false
@@ -190,6 +208,54 @@ function drawBarChart2(init){
 }
 
 
+function drawBarChart3(init){
+	
+	myChart3 = new Chart(ctx3, {
+	    type: 'bar',
+	    data: {
+	        labels: init.labels,
+	        datasets: [{
+	        	label: '# of Votes',
+	            data: init.data,
+	            borderWidth: 1,
+	            borderColor:'rgba(54, 162, 235, 1)',
+	            backgroundColor:init.color,//'rgba(54, 162, 235, 1)',
+	            //hoverBackgroundColor:'rgba(75, 192, 192, 1)',
+		        //hoverBorderColor:'rgba(75, 192, 192, 1)',
+		        hoverBorderWidth:1
+	        }],
+	    },
+	    options: {
+	    	onClick:function(e, r){
+	    		alert(JSON.stringify(e));
+	    		//alert(
+	    				//this.active[0]._chart.config.data.labels[this.active[0]._index]
+	    				//this.active[0]._chart.config.data.datasets[0].data[this.active[0]._index]//_index//_chart.config.data.datasets[0].backgroundColor
+	    				
+	    		//);
+	    	},
+	    	legend:{
+	        	display:false
+	        },
+	    	animation:{
+	        	duration: 150,
+	    		easing: 'linear'
+	        }
+// scales: {
+// xAxes: [{
+// stacked: true
+// }],
+// yAxes: [{
+// stacked: true
+// }]
+// }
+	    }
+	});
+	
+}
+
+
+
 function disconnect() {
 	if (stompClient != null) {
 		stompClient.disconnect();
@@ -206,8 +272,8 @@ function sendName() {
 
 function showGreeting(message) {
 	$("#greetings").append("<tr><td>" + message + "</td></tr>");
-	window.scrollTo(0, document.body.scrollHeight);
-	//ff();
+	//window.scrollTo(0, document.body.scrollHeight);
+	ff();
 }
 
 function ff() {
@@ -220,6 +286,9 @@ function init() {
 	ctx0 = document.getElementById("myChart0").getContext('2d');
 	ctx1 = document.getElementById("myChart1").getContext('2d');
 	ctx2 = document.getElementById("myChart2").getContext('2d');
+	ctx3 = document.getElementById("myChart3").getContext('2d');
+	
+	ctx5 = document.getElementById("myChart5").getContext('2d');
 	connect();
 }
 $(document).ready(function() {
