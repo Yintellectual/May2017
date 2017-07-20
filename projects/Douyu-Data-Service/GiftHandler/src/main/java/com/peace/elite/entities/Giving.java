@@ -1,5 +1,9 @@
 package com.peace.elite.entities;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import com.peace.elite.partition.Partition;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +13,6 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class Giving implements Comparable<Giving> {
 
 	private long uid;
@@ -20,6 +23,45 @@ public class Giving implements Comparable<Giving> {
 	@Override
 	public int compareTo(Giving o) {
 		// TODO Auto-generated method stub
-		return (int) ((timeStamp - o.getTimeStamp()) / (long) Integer.MAX_VALUE);
+		// int result = (int) ((timeStamp - o.getTimeStamp()));
+		// if(result == 0){
+		long result = uid - o.getUid();
+		if (result > 0) {
+			return 1;
+		} else if (result < 0) {
+			return -1;
+		} else {
+			return 0;
+		}
+		// }else{
+		// return result;
+		// }
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(Object o) {
+		boolean result = false;
+		try {
+			if (o == null || o instanceof Giving) {
+
+				result = false;
+			}else{
+				result = (uid == ((Giving) o).getUid());
+			}
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+			try {
+				Thread.sleep(ThreadLocalRandom.current().nextInt(100));
+			} catch (Exception ex) {
+			}
+			equals(o);			
+		}
+		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		return new Long(uid).hashCode();
 	}
 }

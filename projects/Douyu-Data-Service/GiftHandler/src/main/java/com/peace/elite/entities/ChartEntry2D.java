@@ -39,12 +39,12 @@ public class ChartEntry2D implements Comparable<ChartEntry2D> {
 	@Override
 	public int compareTo(ChartEntry2D o) {
 		// TODO Auto-generated method stub
-		return (int)(this.data.get() - (o.getData()));
+		return (int)(this.id.compareTo(o.getId()));
 	}
 
 	@Override
 	public int hashCode() {
-		return label.hashCode();
+		return id.hashCode();
 	}
 
 	@Override

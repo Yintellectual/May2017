@@ -4,6 +4,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
+import com.peace.elite.entities.ChartEntry2D;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,12 +13,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Partition<RAW_ENTRY, CHART_ENTRY, CRITERION extends Comparable<CRITERION>> implements Predicate<RAW_ENTRY>, Comparable<Partition<RAW_ENTRY, CHART_ENTRY, CRITERION>> {
+public class Partition<RAW_ENTRY, CRITERION extends Comparable<CRITERION>> implements Predicate<RAW_ENTRY>, Comparable<Partition<RAW_ENTRY, CRITERION>> {
 
-	private CHART_ENTRY chartEntry;
+	private ChartEntry2D chartEntry = new ChartEntry2D();
 	private CRITERION criterion;
 	private BiPredicate<RAW_ENTRY, CRITERION> predicate;
-	private BiFunction<RAW_ENTRY, CHART_ENTRY, CHART_ENTRY> accumulate;
+	private BiFunction<RAW_ENTRY, ChartEntry2D, ChartEntry2D> accumulate;
 
 	@Override
 	public boolean test(RAW_ENTRY raw) {
@@ -40,7 +41,7 @@ public class Partition<RAW_ENTRY, CHART_ENTRY, CRITERION extends Comparable<CRIT
 			return false;
 		}
 		
-		return criterion.equals(((Partition<RAW_ENTRY, CHART_ENTRY, CRITERION>)o).getCriterion());
+		return criterion.equals(((Partition<RAW_ENTRY, CRITERION>)o).getCriterion());
 	}
 	
 	@Override
@@ -49,7 +50,7 @@ public class Partition<RAW_ENTRY, CHART_ENTRY, CRITERION extends Comparable<CRIT
 	}
 
 	@Override
-	public int compareTo(Partition<RAW_ENTRY, CHART_ENTRY, CRITERION> o) {
+	public int compareTo(Partition<RAW_ENTRY, CRITERION> o) {
 		// TODO Auto-generated method stub
 		return criterion.compareTo(o.criterion);
 	}

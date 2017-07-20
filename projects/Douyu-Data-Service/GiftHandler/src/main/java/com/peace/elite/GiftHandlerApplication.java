@@ -11,18 +11,23 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
+import com.peace.elite.chartService.DailyTimeBasedCharts;
+import com.peace.elite.chartService.entity.BoundaryWrapper;
 import com.peace.elite.entities.DouyuMessageType;
 import com.peace.elite.entities.Giving;
 import com.peace.elite.entities.SmallGift;
 import com.peace.elite.eventListener.Event;
 import com.peace.elite.eventListener.EventFactory;
-
+import com.peace.elite.eventListener.Listener;
 import com.peace.elite.partition.Partitions2D;
 import com.peace.elite.partition.UidPartitions;
 import com.peace.elite.redisMQ.RedisMQ;
 import com.peace.elite.redisRepository.AudienceRedisRepository;
 import com.peace.elite.redisRepository.GiftRepository;
 import com.peace.elite.redisRepository.impl.GiftRepositoryRedisImpl;
+
+import lombok.Data;
+
 import org.springframework.boot.CommandLineRunner;
 import java.util.*;
 import java.util.concurrent.LinkedTransferQueue;
@@ -63,7 +68,53 @@ public class GiftHandlerApplication {
 
 	public class ReceivingEventFactory extends EventFactory<Giving> {
 	}
+	private long total = 0;
+	private long lost  = 0;
 
+	private Long[] timeToTimeInterval(Long time, Long start, Long end, Long length) {
+		Long[] result = new Long[2];
+
+		long delta = (time - start) % length;
+		result[0] = time - delta;
+		result[1] = Math.min(end, result[0] + length);
+		return result;
+	}
+	@Bean
+	public Clocker clocker(){
+			Clocker bean = new Clocker();
+			bean.start();
+			return bean;
+	}
+	@Data
+	public class Clocker extends Thread{
+		private Long[] range=timeToTimeInterval(new Date().getTime(), 1500375600000l, Long.MAX_VALUE,86400000l);
+		private EventFactory<BoundaryWrapper<Long>> eventFactory = new EventFactory<>();
+		public Clocker() {
+			// TODO Auto-generated constructor stub
+		}
+		public Clocker(Long[] range){
+			this.range = range;
+		}
+		public void register(Listener<BoundaryWrapper<Long>> l){
+			eventFactory.register(l);
+		}
+		@Override
+		public void run(){
+			try{
+			while(true){
+				Long[] newRange = timeToTimeInterval(new Date().getTime(), 1500375600000l, Long.MAX_VALUE,86400000l);
+				if(newRange[0]!=range[0]){
+					//new day
+					eventFactory.publish(new Event<>(new BoundaryWrapper<Long>(newRange[0], newRange[1])));
+				}
+				range = newRange;
+				Thread.sleep(3600000);
+			}}catch(Exception e){
+				try{Thread.sleep(3600);}catch(Exception ex){}
+				run();
+			}
+		}
+	};
 	// @Bean
 	// public Thread testThread(){
 	// Thread test = new Thread(()->{
@@ -131,20 +182,13 @@ public class GiftHandlerApplication {
 					SmallGift smallGift = SmallGift.getInstance(map);
 					Giving giving = new Giving(smallGift.getUid(), smallGift.getGfid(), new Date().getTime(),
 							smallGift.getNn());
-					receivingEventFactory.publish(new Event<Giving>(giving));
+						receivingEventFactory.publish(new Event<Giving>(giving));
+					
 //					if (smallGift.getGfid() == 196 || smallGift.getGfid() == 195) {
 						// rocketBarChart.update(smallGift.getUid(),
 						// smallGift.getNn());
-						String display = smallGift.toString();
-
-						redisMQ.messageDisplay(display);
-						try {
-							if (display != null)
-								webSocket.convertAndSend("/topic/greetings", new Greeting(display));
-						} catch (NullPointerException ue) {
-							// do nothing
-						}
-//					}
+					webSocket.convertAndSend("/topic/greetings", giving);
+						//					}
 				}
 			}
 		});
@@ -153,10 +197,15 @@ public class GiftHandlerApplication {
 	}
 
 	public Map<String, String> parseMessage(String message) {
-		if (!message.contains("dw@=1")) {
-			System.out.println(message);
-			return null;
-		}
+//		total+=1;
+//		if (!message.contains("dw@=1")) {
+//			lost+=1;
+//			System.out.println(message);
+//			System.out.println(lost+"/"+total+", lost rate ="+ ((double)lost)/((double)total));
+//			return null;
+//		}
+//		
+		
 		Map<String, String> protocal = new LinkedHashMap<>();
 		String[] entries = message.split("/");
 		for (String entry : entries) {
@@ -173,6 +222,13 @@ public class GiftHandlerApplication {
 														// bad data
 				// do nothing
 			}
+		}
+		try{
+			if(GiftRepository.getGiftPrice(Long.parseLong(protocal.get("gfid")))<1){
+				System.out.println(protocal.get("nn")+": "+protocal.get("gfid"));
+			}
+		}catch(Exception e){
+			e.printStackTrace(System.out);
 		}
 		return protocal;
 	}

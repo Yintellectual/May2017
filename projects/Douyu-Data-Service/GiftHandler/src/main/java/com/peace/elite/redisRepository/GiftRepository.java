@@ -1,12 +1,15 @@
 package com.peace.elite.redisRepository;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Repository;
@@ -26,13 +29,19 @@ public abstract class GiftRepository implements Listener<Giving> {
 	public static BiPredicate<Giving, Giving> hasUid = (giving, user) -> {
 		return user.getUid() == giving.getUid();
 	};
-	public static BiPredicate<Giving, BoundaryWrapper<Giving>> withInTimeInterval = (giving, boundaries) -> {
-		return (giving.getTimeStamp() >= boundaries.getFirst().getTimeStamp())
-				&& (giving.getTimeStamp() < boundaries.getSecond().getTimeStamp());
+	public static BiPredicate<Giving, BoundaryWrapper<Long>> withInTimeInterval = (giving, boundaries) -> {
+		return (giving.getTimeStamp() >= boundaries.getFirst())
+				&& (giving.getTimeStamp() <= boundaries.getSecond());
 	};
 	public static Function<Long, String> timestampToShort = (timeStamp) -> {
 		Date localStartDate = new Date(timeStamp);
-		DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT);
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		String timeLabel = format.format(localStartDate);
+		return timeLabel;
+	};
+	public static Function<Long, String> timestampToDate= (timeStamp) -> {
+		Date localStartDate = new Date(timeStamp);
+		SimpleDateFormat format = new SimpleDateFormat("M.dd");
 		String timeLabel = format.format(localStartDate);
 		return timeLabel;
 	};
@@ -40,6 +49,20 @@ public abstract class GiftRepository implements Listener<Giving> {
 	public static Function<Long[], String> timeIntervalToLabel = (timeInterval) -> {
 		return timestampToShort.apply(timeInterval[0]) + "-" + timestampToShort.apply(timeInterval[1]);
 	};
+	public static Function<Long[], String> timeIntervalToDateLabel = (timeInterval) -> {
+		return timestampToDate.apply(timeInterval[0]) + "-" + timestampToDate.apply(timeInterval[1]);
+	};
+
+	public String retrieveKey(String str) {
+		Pattern pattern = Pattern.compile("(.*?:\\d*:\\d*):.*");
+		Matcher matcher = pattern.matcher(str);
+		if (matcher.matches()) {
+			return matcher.group(1);
+		}
+		return null;
+	}
+
+	public abstract Giving recoverGiving(TypedTuple<String> tuple);
 
 	// 1.
 	// void receive(String keyUser, String keyGift, long timeStamp, String
@@ -146,6 +169,15 @@ public abstract class GiftRepository implements Listener<Giving> {
 		case 519:
 			amount_in_cents = 1;
 			break;
+		case 712:
+			amount_in_cents = 1;
+			break;
+		case 714:
+			amount_in_cents = 1;
+			break;
+		case 750:
+			amount_in_cents = 60;
+			break;
 		case 956:
 			amount_in_cents = 1;
 			break;
@@ -161,6 +193,16 @@ public abstract class GiftRepository implements Listener<Giving> {
 		case 918:
 			amount_in_cents = 1;
 			break;
+		case 947:
+			amount_in_cents = 1;
+			break;
+		case 997:
+			amount_in_cents = 5000;
+			break;
+		case 988:
+			amount_in_cents = 5000;
+			break;
+
 		case 195:
 			amount_in_cents = 1000;
 			break;
@@ -198,10 +240,10 @@ public abstract class GiftRepository implements Listener<Giving> {
 		case 713:
 			name = "怂";
 			break;
-			// 怂
-			case 754:
-				name = "水手服";
-				break;
+		// 怂
+		case 754:
+			name = "水手服";
+			break;
 
 		// 魚丸
 		case 191:
@@ -226,9 +268,28 @@ public abstract class GiftRepository implements Listener<Giving> {
 		case 520:
 			name = "稳";
 			break;
+		case 712:
+			name = "未知";
+			break;
+		case 714:
+			name = "未知";
+			break;
+
+		case 750:
+			name = "办卡";
+			break;
 		// 双马尾 0.1
 		case 918:
 			name = "双马尾";
+			break;
+		case 947:
+			name = "狼爪手";
+			break;
+		case 988:
+			name = "猫耳火箭";
+			break;
+		case 997:
+			name = "大头火箭";
 			break;
 		case 195:
 			name = "飞机";

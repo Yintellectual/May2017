@@ -222,7 +222,7 @@ h4 {
 									</h3>
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div hidden="true" class="col-md-6">
 								<div class="panel">
 									<div class="panel-heading-white panel-heading text-center">
 										<h4>庄严国土</h4>
@@ -235,7 +235,7 @@ h4 {
 								</div>
 							</div>
 
-							<div class="col-md-6">
+							<div hidden="true" class="col-md-6">
 								<div class="panel">
 									<div class="panel-heading-white panel-heading text-center">
 										<h4>利乐有情</h4>
@@ -250,7 +250,8 @@ h4 {
 							<div class="col-md-12">
 								<div class="panel">
 									<div class="panel-heading-white panel-heading">
-										<h4>愿祈佛手双垂下， 摩得人心一样平</h4>
+										<h4 hidden="true">愿祈佛手双垂下， 摩得人心一样平</h4>
+										<h4 >当日总消费（单位：角）</h4>
 									</div>
 									<div class="panel-body" style="padding-bottom: 50px;">
 										<canvas id="myChart2"></canvas>
@@ -262,10 +263,12 @@ h4 {
 					<div class="col-md-6">
 						<div class="panel">
 							<div class="panel-heading-white panel-heading">
-								<h4>向善奉行</h4>
+								<h4 hidden="true">向善奉行</h4>
+								<h4 >当日每五分钟总消费（单位：角）</h4>
 							</div>
 							<div class="panel-body">
-								<div class="col-md-12">
+								<div class="col-md-12" align="center">
+									<button class="btn btn-primary" id="global-statistics">全局统计</button>
 									<canvas id="myChart3"></canvas>
 								</div>
 							</div>
@@ -274,7 +277,8 @@ h4 {
 					<div class="col-md-6">
 						<div class="panel">
 							<div class="panel-heading-white panel-heading">
-								<h4>大愿悉成满， 百福庄自在</h4>
+								<h4 hidden="true">大愿悉成满， 百福庄自在</h4>
+								<h4 >每日总消费（单位：角）</h4>
 							</div>
 							<div class="panel-body">
 								<div class="col-md-12">
@@ -286,15 +290,11 @@ h4 {
 					<div class="col-md-6">
 						<div class="panel">
 							<div class="panel-heading-white panel-heading">
-								<h4>诸恶莫作</h4>
+								<h4 hidden="true">诸恶莫作</h4>
+								<h4 >高端礼品清单</h4>
 							</div>
 							<div class="panel-body">
 								<table id="conversation" class="table table-striped">
-									<thead>
-										<tr>
-											<th>Greetings</th>
-										</tr>
-									</thead>
 									<tbody id="greetings">
 									</tbody>
 									<span id="bottom"></span>

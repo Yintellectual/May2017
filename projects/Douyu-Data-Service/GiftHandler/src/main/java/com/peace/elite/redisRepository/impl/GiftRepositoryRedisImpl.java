@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import static com.peace.elite.redisRepository.impl.GiftRepositoryRedisImpl.USERS_GIFT_RANK_TOTAL;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -95,7 +96,6 @@ public class GiftRepositoryRedisImpl extends GiftRepository {
 	}
 
 	@Override
-	@Synchronized
 	public void receive(long uid, long gid, long timeStamp, String valueUserName) {
 		// TODO Auto-generated method stub
 		boolean updateName = false;
@@ -108,8 +108,8 @@ public class GiftRepositoryRedisImpl extends GiftRepository {
 		String keyGiving = GIVING(uid, gid);
 		String countGiving = getCountGiving(keyGiving);
 		long valueGiftPrice = getGiftPrice(gid);
-		stringRedisTemplate.setEnableTransactionSupport(true);
-		stringRedisTemplate.multi();
+		//stringRedisTemplate.setEnableTransactionSupport(true);
+		//stringRedisTemplate.multi();
 
 		if (updateName) {
 			hashOperations.put(keyUser, "name", valueUserName);
@@ -125,15 +125,35 @@ public class GiftRepositoryRedisImpl extends GiftRepository {
 		zetOperations.incrementScore(USERS_GIFT_RANK(gid), keyUser, (double) 1);
 		valueOperations.increment(COUNT_GIFT(gid), 1l);
 
-		stringRedisTemplate.exec();
+		//stringRedisTemplate.exec();
 		
 //		if(zetOperations.score(GIVINGS_TIME_LINE, keyGiving + ":" + countGiving)>1500001462000l*1.01){
 //			System.out.println(keyGiving + ":" + countGiving+":"+timeStamp);
 //			throw new RuntimeException();
 //		}
-		
-		
 	}
+	public Giving recoverGiving(TypedTuple<String> tuple){
+		Giving result = null;
+		Long timestamp = new Double(tuple.getScore()).longValue();
+		String value = tuple.getValue();
+		String keyGiving = retrieveKey(value);
+		if(keyGiving == null){
+			System.out.println("!!!!!!!!!!!!Illegal Giving Record"+tuple);
+			throw new RuntimeException();
+		}else{
+			List<String> hkeys = new ArrayList<>();
+			hkeys.add("uid");
+			hkeys.add("gid");
+			List<String> hVList = hashOperations.multiGet(keyGiving, hkeys);
+			Long uid = Long.parseLong(hVList.get(0));
+			Long gid = Long.parseLong(hVList.get(1));
+			String name = getUserName(uid);
+			result = new Giving(uid, gid, timestamp, name);
+		}
+		
+		return result;
+	}
+	
 
 	@Override
 	public String getCountGiving(String keyGiving) {

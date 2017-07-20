@@ -1,9 +1,11 @@
 package com.peace.elite.chartService.chartData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -20,9 +22,9 @@ import lombok.Data;
 import lombok.Synchronized;
 
 @Data
-public abstract class ChartData<CHART_ENTRY extends Comparable<CHART_ENTRY>, RAW_ENTRY> extends EventFactory<RAW_ENTRY> implements Listener<CHART_ENTRY>{
+public abstract class ChartData<CHART_ENTRY extends Comparable<CHART_ENTRY>, RAW_ENTRY extends Comparable<RAW_ENTRY>> extends EventFactory<RAW_ENTRY> implements Listener<CHART_ENTRY>{
 	
-	protected CopyOnWriteArrayList<CHART_ENTRY> chartEntries = new CopyOnWriteArrayList<>();
+	protected ConcurrentSkipListSet<CHART_ENTRY> chartEntries = new ConcurrentSkipListSet<>();
 	protected String WEB_SOCKET_PUBLISH_CHANNEL;
 	protected SimpMessagingTemplate webSocket;
 	
@@ -32,33 +34,28 @@ public abstract class ChartData<CHART_ENTRY extends Comparable<CHART_ENTRY>, RAW
 		int index = -1;
 		for(CHART_ENTRY e:chartEntries){
 			if(e==entry){
-				 index = chartEntries.indexOf(e);
+				 index = Arrays.binarySearch(chartEntries.toArray(),entry);
 				 //minus the first one, and leave the second one be zero
 				 //publish(e,e);
 			}
 		}
-		if(index == -1){
+		if(index < 0){
 			chartEntries.add(entry);
-			index = chartEntries.indexOf(entry);
+			index = Arrays.binarySearch(chartEntries.toArray(),entry);
 		}
 		webSocketUpdate(index, entry);
 	}
 	
 	public abstract void publish(CHART_ENTRY e1, CHART_ENTRY e2);
-	public abstract ChartData2D getChartData();	    
+	public abstract ChartData2D getChartData();
+	public abstract ChartData2D getChartDataReverse();	    
 	public abstract void webSocketUpdate(int index,CHART_ENTRY e);
 	public abstract CHART_ENTRY clone(CHART_ENTRY e);
 	public abstract void useAsDataSource();
-    public void sort(Comparator<CHART_ENTRY> comparator){
-    	Collections.sort(chartEntries, comparator);
-    }
-    public void sort(){
-    	Collections.sort(chartEntries);
-    	Collections.reverse(chartEntries);
-    }
+	public abstract ChartData2D getChartDataCustomOrder(Comparator<CHART_ENTRY> comparator);
     
 	public void reset(){
-		chartEntries = new CopyOnWriteArrayList<>();
+		chartEntries = new ConcurrentSkipListSet<>();
 	}
 	    
 	@Override

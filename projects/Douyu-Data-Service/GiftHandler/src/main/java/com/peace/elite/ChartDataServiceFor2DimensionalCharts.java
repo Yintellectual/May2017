@@ -1,6 +1,7 @@
 package com.peace.elite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -72,7 +73,9 @@ public class ChartDataServiceFor2DimensionalCharts extends ChartData<ChartEntry2
 	@Override
 	public ChartData2D getChartData() {
 		// TODO Auto-generated method stub
-		return getChartData(chartEntries);
+		List<ChartEntry2D> d = Arrays.asList(chartEntries.toArray(new ChartEntry2D[chartEntries.size()]));
+		Collections.sort(d);
+		return getChartData(d);
 	}
 
 	@Override
@@ -88,4 +91,24 @@ public class ChartDataServiceFor2DimensionalCharts extends ChartData<ChartEntry2
 			publish(new Event<>(e));
 		}
 	}
+
+	@Override
+	public ChartData2D getChartDataReverse() {
+		// TODO Auto-generated method stub
+		List<ChartEntry2D> d = Arrays.asList(chartEntries.toArray(new ChartEntry2D[chartEntries.size()]));
+		Collections.sort(d);
+		Collections.reverse(d);
+		return getChartData(d);
+	}
+	
+	@Override
+	public ChartData2D getChartDataCustomOrder(Comparator<ChartEntry2D> comparator) {
+		// TODO Auto-generated method stub
+		List<ChartEntry2D> d = Arrays.asList(chartEntries.toArray(new ChartEntry2D[chartEntries.size()]));
+		Collections.sort(d,comparator );
+		Collections.reverse(d);
+		return getChartData(d);
+	}
+	
+	
 }
