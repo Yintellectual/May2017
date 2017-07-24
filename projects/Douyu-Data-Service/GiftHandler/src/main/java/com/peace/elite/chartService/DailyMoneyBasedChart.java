@@ -1,14 +1,20 @@
 package com.peace.elite.chartService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -34,7 +40,7 @@ import com.peace.elite.redisRepository.GiftRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+@Data
 @Controller
 public class DailyMoneyBasedChart implements Listener<BoundaryWrapper<Long>>{
 
@@ -46,11 +52,18 @@ public class DailyMoneyBasedChart implements Listener<BoundaryWrapper<Long>>{
 	private ReceivingEventFactory receivingEventFactory;
 	@Autowired
 	private Clocker clocker;
+	@Autowired
+	private RecordService recordService;
+	private Long[] range;//= new Long[]{clocker.getRange()[0],Long.MAX_VALUE};
+	
 	private final String WEB_SOCKET_APP_CHANNEL = "/2-dimensional/generic";
 	private final String WEB_SOCKET_PUBLISH_CHANNEL = "/topic/2-dimensional/generic";
 
 	private ChartData<ChartEntry2D, ChartEntry2D> chartData;
-
+	private Partitions2D<Giving, ChartEntry2D, Giving> partitions1;
+	private ChartData<ChartEntry2D, ChartEntry2D> chartData1;
+	Partitions2D<ChartEntry2D, ChartEntry2D, BoundaryWrapper<ChartEntry2D>> partitions;
+	GivingDataSource givingDataSource;
 	public DailyMoneyBasedChart() {
 	}
 
@@ -64,11 +77,12 @@ public class DailyMoneyBasedChart implements Listener<BoundaryWrapper<Long>>{
 
 	@PostConstruct
 	public void init() {
-		clocker.register(this);
-		Long[] range = clocker.getRange();// ,new
-		range[1]=Long.MAX_VALUE;										// Long(1500141600000l)};
-		GivingDataSource givingDataSource = new GivingDataSource(range, giftRepository, receivingEventFactory);
-		Partitions2D<Giving, ChartEntry2D, Giving> partitions1 = new Partitions2D<>(
+		
+		if(range ==null){
+			range  = new Long[]{clocker.getRange()[0],Long.MAX_VALUE};
+		}
+		givingDataSource = new GivingDataSource(range, giftRepository, receivingEventFactory);
+		partitions1 = new Partitions2D<>(
 				// predicate
 				GiftRepository.hasUid,
 				// accumulate
@@ -83,10 +97,9 @@ public class DailyMoneyBasedChart implements Listener<BoundaryWrapper<Long>>{
 				// dataSource
 				givingDataSource);
 
-		ChartData<ChartEntry2D, ChartEntry2D> chartData1 = new ChartDataServiceFor2DimensionalCharts(partitions1,
-				WEB_SOCKET_PUBLISH_CHANNEL, webSocket);
-		chartData1.setWEB_SOCKET_PUBLISH_CHANNEL("1");
-		Partitions2D<ChartEntry2D, ChartEntry2D, BoundaryWrapper<ChartEntry2D>> partitions = new Partitions2D<>(
+		chartData1 = new ChartDataServiceFor2DimensionalCharts(partitions1,
+				"1", webSocket);
+		partitions = new Partitions2D<>(
 				// predicate
 				(e, b) -> {
 					long money = e.getData();
@@ -106,7 +119,8 @@ public class DailyMoneyBasedChart implements Listener<BoundaryWrapper<Long>>{
 					String name = e.getLabel();
 					String id = e.getId();
 					if (money < 0) {
-						// error
+						entry.increase(money);
+						return entry;	
 					}
 					if (money < 100) {
 						name = generateGroupName(100l);
@@ -156,13 +170,17 @@ public class DailyMoneyBasedChart implements Listener<BoundaryWrapper<Long>>{
 
 		chartData = new ChartDataServiceFor2DimensionalCharts(partitions, "1", webSocket);
 		Long start = new Date().getTime();
+		recordService.attach(givingDataSource);
 		givingDataSource.start();
-		partitions1.cleanTailData();
+		//partitions1.cleanTailData();
+		
 		Long end1 = new Date().getTime();
 		partitions.setDataSource(chartData1);
 		chartData1.register(partitions);
 		chartData1.useAsDataSource();
-		partitions.cleanTailData();
+		chartData.setWEB_SOCKET_PUBLISH_CHANNEL(WEB_SOCKET_PUBLISH_CHANNEL);
+		
+		//partitions.cleanTailData();
 		Long end2 = new Date().getTime();
 		System.out.println("----------------------------------------------------------");
 		System.out.println("----------------------------------------------------------\n\n\n");
@@ -170,29 +188,72 @@ public class DailyMoneyBasedChart implements Listener<BoundaryWrapper<Long>>{
 		// System.out.println("phase 2: "+ (end2-end1));
 		System.out.println("----------------------------------------------------------");
 		System.out.println("----------------------------------------------------------");
-		Thread thread = new Thread(() -> {
-			while (true) {
-				try {
-					Thread.sleep(6000);
-				} catch (Exception e) {
-				}
-				for (Partition<ChartEntry2D, BoundaryWrapper<ChartEntry2D>> p : partitions.getPartitions()) {
-					if (p.getChartEntry() != null) {
-						p.getChartEntry().setData(0l);
-					}
-				}
-				chartData1.useAsDataSource();
-				webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL + "/update", chartData.getChartDataCustomOrder((e1, e2) -> (int) (e1.getData() - e2.getData())));
-			}
-		});
-		thread.start();
+//		Thread thread = new Thread(() -> {
+//			while (true) {
+//				try {
+//					Thread.sleep(6000);
+//				} catch (Exception e) {
+//				}
+//				for (Partition<ChartEntry2D, BoundaryWrapper<ChartEntry2D>> p : partitions.getPartitions()) {
+//					if (p.getChartEntry() != null) {
+//						p.getChartEntry().setData(0l);
+//					}
+//				}
+//				chartData1.useAsDataSource();
+//				webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL + "/update", chartData.getChartDataCustomOrder((e1, e2) -> (int) (e1.getData() - e2.getData())));
+//			}
+//		});
+//		thread.start();
 
 	}
+	private Long[] timeToTimeInterval(Long time, Long start, Long end, Long length) {
+		Long[] result = new Long[2];
 
+		long delta = (time - start) % length;
+		result[0] = time - delta;
+		result[1] = Math.min(end, result[0] + length);
+		return result;
+	}
+	private Long dateRangeToLong(String dateRange){
+		String date = dateRange.split("-")[0];
+		String[] s = date.split("\\.");
+		Long result = 0l;
+		try{
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.getInstance().get(Calendar.YEAR), Integer.parseInt(s[0])-1, Integer.parseInt(s[1]), 20, 0, 0);
+			result = calendar.getTime().getTime();
+		}catch(Exception e){}
+		return result;
+	}
+	public void reloadChart(){
+		range = timeToTimeInterval(new Date().getTime(), 1500202800000l, Long.MAX_VALUE, 86400000l);
+		range[1] = Long.MAX_VALUE;
+		init();
+		recordService.sendAll(givingDataSource);
+		webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL + "/update2", chartData.getChartDataCustomOrder((e1, e2) -> (int) (e1.getData() - e2.getData())));
+	}
+	@MessageMapping(WEB_SOCKET_APP_CHANNEL + "/update2")
+	public void historicalChart(@Payload String dateRange){
+		
+		chartData.setWEB_SOCKET_PUBLISH_CHANNEL("1");
+		Long date = dateRangeToLong(dateRange);
+		range = timeToTimeInterval(date, 1500202800000l, Long.MAX_VALUE, 86400000l);
+		//System.out.println("range[1]: "+range[1]+"; \n new Date: "+new Date().getTime());
+		if(range[1]>new Date().getTime()){
+			range[1] = Long.MAX_VALUE;
+		}
+		init();
+		recordService.sendAll(givingDataSource);
+		webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL + "/update2", chartData.getChartData());//((e1, e2) -> (int) (e1.getData() - e2.getData())));
+		System.gc();
+	}
 	@MessageMapping(WEB_SOCKET_APP_CHANNEL + "/init")
 	@SendTo(WEB_SOCKET_PUBLISH_CHANNEL + "/init")
 	public ChartData2D initRequestHandler() {
-		return chartData.getChartDataCustomOrder((e1, e2) -> (int) (e1.getData() - e2.getData()));
+		
+		//init();
+		recordService.sendAll(givingDataSource);
+		return chartData.getChartData();//((e1, e2) -> (int) (e1.getData() - e2.getData()));
 	}
 
 	@MessageMapping(WEB_SOCKET_APP_CHANNEL + "/sort")

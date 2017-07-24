@@ -116,24 +116,24 @@ public class DispatcherApplication {
 				// if(!isConnected(clientSocket)){
 				clientSocket.connect(address);
 				// }
-				System.out.println("a");
+				//System.out.println("a");
 				// Send the filename via the connection
 				OutputStream oS = clientSocket.getOutputStream();
 				// oS.write(applyDouYuProtocol("type@=loginreq/roomid@="+"ROOM_ID"+"/"));
-				System.out.println("b");
+				//System.out.println("b");
 				oS.write(applyDouYuProtocol("type@=loginreq/username@=/ct@=0/password@=/roomid@=" + ROOM_ID
 						+ "/devid@=/rt@=" + new Date().getTime() / 1000
 						+ "/vk@=/ver@=20150929/aver@=2017060901/ltkid@=/biz@=1/stk@=/"));
-				System.out.println("c");
+				//System.out.println("c");
 				oS.write(applyDouYuProtocol("type@=joingroup/rid@=" + ROOM_ID + "/gid@=-9999/"));
-				System.out.println("d");
+				//System.out.println("d");
 				setConnected();
 				heartBeatThread(clientSocket);
 				printerThread(clientSocket);
 			} catch (Exception e) {
 				Socket socket = new Socket();
 				setClientSocket(socket);
-				System.out.println("--Reconnect in 10s");
+				//System.out.println("--Reconnect in 10s");
 				try {
 					Thread.sleep(10000);
 				} catch (Exception ex) {
@@ -186,7 +186,7 @@ public class DispatcherApplication {
 					System.gc();
 					clientSocket.getOutputStream()
 							.write(applyDouYuProtocol("type@=keeplive/tick@=" + new Date().getTime() / 1000 + "/"));
-					System.out.println("-----------------------------------------heartbeat....");
+					//System.out.println("-----------------------------------------heartbeat....");
 					lastHeartBeat = Instant.now();
 				}
 			} catch (Exception e) {
@@ -225,7 +225,7 @@ public class DispatcherApplication {
 			try {
 				return DouyuMessageType.valueOf(m.group(1));
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				//System.out.println(message);
 			}
 		}
 		return null;
@@ -244,11 +244,14 @@ public class DispatcherApplication {
 			reader.read(buffer, 0, BUFFER_SIZE);
 			Instant instantRead = Instant.now();
 			String data = new String(buffer).trim();
-			Arrays.fill(buffer, (char) 0);
+			
+			//good util here
+			
+			
 			Arrays.stream(data.split("type@=")).map(message -> {
-				if (message.matches(".*[^/][^/][^/][^/][^/][^/][^/][^/][^/][^/][^/][^/]rid@=.*")) {
-					System.out.println("~~~~~~~~~~~cut:\n"+message);
-					return message.split("[^/][^/][^/][^/][^/][^/][^/][^/][^/][^/][^/][^/]rid@=")[0];
+				if (message.matches(".*[^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/]rid@=.*")) {
+					//System.out.println("~~~~~~~~~~~cut:\n"+message);
+					return message.split("[^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/][^\\/]rid@=")[0];
 				} else if (message.matches(".*\\s.*")) {
 					//System.out.println("~~~~~~~~~~~Somehow there is space in the message");
 					return message.replaceAll("\\s", "");
@@ -256,6 +259,7 @@ public class DispatcherApplication {
 					return message;
 			}).filter(message -> message != null).filter(message -> !message.isEmpty())
 					.filter(message -> message.length() > 12).map(message -> "type@=" + message).forEach(message -> {
+						
 						DouyuMessageType type = getType(message);
 						if (type != null) {
 							redisMQ.messageQueue(type, message);
@@ -269,8 +273,8 @@ public class DispatcherApplication {
 						}
 					});
 			// System.out.println( data.length()+ " : \n" + data);
-
-			System.out.println("---------------------------buffer_size = " + BUFFER_SIZE);
+			Arrays.fill(buffer, (char) 0);
+			//System.out.println("---------------------------buffer_size = " + BUFFER_SIZE);
 			if (data.length() > BUFFER_SIZE * 4 / 10) {
 				System.out
 						.println("------------------------------------------------------increasing buffer by once....");
@@ -279,9 +283,9 @@ public class DispatcherApplication {
 				buffer = new char[BUFFER_SIZE];
 			}
 			Instant instantPrint = Instant.now();
-			System.out.println("-------------read interval = " + Duration.between(instant, instantRead) + " : \n"
-					+ "-------------print interval = " + Duration.between(instantRead, instantPrint) + " : \n"
-					+ "---LHB = " + lastHeartBeat + " : \n");
+//			//System.out.println("-------------read interval = " + Duration.between(instant, instantRead) + " : \n"
+//					+ "-------------print interval = " + Duration.between(instantRead, instantPrint) + " : \n"
+//					+ "---LHB = " + lastHeartBeat + " : \n");
 
 //			try {
 //				Thread.sleep(200);

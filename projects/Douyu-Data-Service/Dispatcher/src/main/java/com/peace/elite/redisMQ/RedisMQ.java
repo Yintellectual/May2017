@@ -39,6 +39,6 @@ public class RedisMQ {
 	 * left push, right block pop
 	 */
 	public void messageQueue(DouyuMessageType douyuMessageType, String message){
-		listOps.leftPush(keyGenerate(douyuMessageType), message);
+//		listOps.leftPush(keyGenerate(douyuMessageType), message);
 	}
 }

@@ -41,7 +41,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Synchronized;
-
+@Data
 @Controller
 public class DailyTimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 
@@ -53,6 +53,8 @@ public class DailyTimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 	private ReceivingEventFactory receivingEventFactory;
 	@Autowired
 	private Clocker clocker;
+	@Autowired
+	private RecordService recordService;
 	GivingDataSource givingDataSource;
 	private final String WEB_SOCKET_APP_CHANNEL = "/2-dimensional/time_based_single_user_chart";
 	private final String WEB_SOCKET_PUBLISH_CHANNEL = "/topic/2-dimensional/time_based_single_user_chart";
@@ -122,6 +124,7 @@ public class DailyTimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 		chartData = new ChartDataServiceFor2DimensionalCharts(partitions, "1", webSocket);
 		Long start = new Date().getTime();
 		System.out.println("starting");
+		recordService.attach(givingDataSource);
 		givingDataSource.start();
 		partitions.cleanTailData();
 		chartData.setWEB_SOCKET_PUBLISH_CHANNEL(WEB_SOCKET_PUBLISH_CHANNEL);
@@ -184,11 +187,13 @@ public class DailyTimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 				addNotFilter(195 + "");
 				addNotFilter(997 + "");
 				addNotFilter(988 + "");
+				addNotFilter(999 + "");
 			}
 			filters2.add((g) -> g.getGid() != 196);
 			filters2.add((g) -> g.getGid() != 195);
 			filters2.add((g) -> g.getGid() != 988);
 			filters2.add((g) -> g.getGid() != 997);
+			filters2.add((g) -> g.getGid() != 999);
 			
 		} else {
 			String keyUser = giftRepository.getKeyUserByName(userName);
@@ -201,6 +206,8 @@ public class DailyTimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 			addFilter(uid);
 			filters2.add((g) -> userName.equals(g.getUserName()));
 		}
+		
+		
 		init();
 		// givingDataSource.filters2.clear();
 
@@ -209,13 +216,14 @@ public class DailyTimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 		// System.out.println("Filter Ready");
 		// givingDataSource.start();
 		// System.out.println("working...");
-
+		
 		System.out.println("sorted");
 		webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL + "/update2", chartData.getChartData());
 		System.out.println(chartData.getChartData().getLabels());
 		System.out.println(chartData.getChartData().getData());
 		chartData.setWEB_SOCKET_PUBLISH_CHANNEL(WEB_SOCKET_PUBLISH_CHANNEL);
 		System.out.println("Resume real time data feeding");
+		recordService.sendAll(givingDataSource);
 	}
 
 	@MessageMapping(WEB_SOCKET_APP_CHANNEL + "/sort")
@@ -228,6 +236,6 @@ public class DailyTimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 	@Override
 	public void handle(Event<BoundaryWrapper<Long>> e) {
 		// TODO Auto-generated method stub
-		update2RequestHandler("global");
+		//update2RequestHandler("global");
 	}
 }

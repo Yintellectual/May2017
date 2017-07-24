@@ -1,6 +1,7 @@
 package com.peace.elite.chartService.dataSource;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -45,6 +46,8 @@ public class GivingDataSource extends EventFactory<Giving> implements Listener<G
 		//}else{
 			//tuples.stream().filter(filter).map(tuple->giftRepository.recoverGiving(tuple)).map(g->new Event<Giving>(g)).forEach(e->publish(e));
 		//}
+		//System.out.println("timeInterval[0]: "+timeInterval[0]+"; \n timeInterval[1]: "+timeInterval[1]);
+		receivingEventFactory.remove(this);
 		if(timeInterval[1]==Long.MAX_VALUE){
 			receivingEventFactory.register(this);
 		}

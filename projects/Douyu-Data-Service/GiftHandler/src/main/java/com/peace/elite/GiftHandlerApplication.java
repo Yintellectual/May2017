@@ -177,17 +177,19 @@ public class GiftHandlerApplication {
 		Thread worker = new Thread(() -> {
 			while (true) {
 				String message = redisMQ.messagePop(DouyuMessageType.dgb);
+				
 				Map<String, String> map = parseMessage(message);
 				if (map != null) {
 					SmallGift smallGift = SmallGift.getInstance(map);
 					Giving giving = new Giving(smallGift.getUid(), smallGift.getGfid(), new Date().getTime(),
 							smallGift.getNn());
+					//if(giving.)
 						receivingEventFactory.publish(new Event<Giving>(giving));
-					
+						System.out.println(giving);	
 //					if (smallGift.getGfid() == 196 || smallGift.getGfid() == 195) {
 						// rocketBarChart.update(smallGift.getUid(),
 						// smallGift.getNn());
-					webSocket.convertAndSend("/topic/greetings", giving);
+					
 						//					}
 				}
 			}

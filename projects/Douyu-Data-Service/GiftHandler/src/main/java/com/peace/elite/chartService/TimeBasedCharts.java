@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 import lombok.Synchronized;
 
 @Controller
-public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
+public class TimeBasedCharts {//implements Listener<BoundaryWrapper<Long>>{
 
 	@Autowired
 	private SimpMessagingTemplate webSocket;
@@ -51,8 +51,9 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 	private GiftRepository giftRepository;
 	@Autowired
 	private ReceivingEventFactory receivingEventFactory;
-	@Autowired
-	private Clocker clocker;
+	
+//	@Autowired
+//	private Clocker clocker;
 	GivingDataSource givingDataSource;
 	private final String WEB_SOCKET_APP_CHANNEL = "/2-dimensional/day_based_single_user_chart";
 	private final String WEB_SOCKET_PUBLISH_CHANNEL = "/topic/2-dimensional/day_based_single_user_chart";
@@ -84,16 +85,17 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 
 	@PostConstruct
 	public void init() {
-		clocker.register(this);
+		//clocker.register(this);
 		Long length = 86400000l ;
 		Long range[] = new Long[2];
 //		long s = clocker.getRange()[0];
-		range[0] = 1500141600000l - length -length;
+		range[0] = 1500202800000l - length -length;
 		range[1] = Long.MAX_VALUE;
 				
 		givingDataSource = new GivingDataSource(range, giftRepository, receivingEventFactory);
 		givingDataSource.filters.addAll(filters);
 		givingDataSource.filters2.addAll(filters2);
+		//recordService.attach(givingDataSource);
 		partitions = new Partitions2D<>(
 				// predicate
 				GiftRepository.withInTimeInterval,
@@ -102,9 +104,12 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 				(giving, entry) -> {
 					Long[] timeInterval = timeToTimeInterval(giving.getTimeStamp(), range[0],
 							Long.MAX_VALUE, length);
-					entry.increase(new Long(GiftRepository.getGiftPrice(giving.getGid())));
-					entry.setLabel(GiftRepository.timeIntervalToDateLabel.apply(timeInterval));
-					entry.setId(timeInterval[0]+"");
+					String label=GiftRepository.timeIntervalToDateLabel.apply(timeInterval);
+					Long price = new Long(GiftRepository.getGiftPrice(giving.getGid()));
+					String id = timeInterval[0]+"";
+					entry.increase(price);
+					entry.setLabel(label);
+					entry.setId(id);
 					return entry;
 				},
 				// generateCriterion
@@ -140,6 +145,7 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 	@MessageMapping(WEB_SOCKET_APP_CHANNEL + "/init")
 	@SendTo(WEB_SOCKET_PUBLISH_CHANNEL + "/init")
 	public ChartData2D initRequestHandler(@Payload String userName) {
+		//recordService.sendAll();
 		return chartData.getChartData();
 	}
 
@@ -172,6 +178,7 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 		if (userName.equals("global")) {
 			filters.add((e) -> true);
 			filters2.add((e) -> true);
+	
 		} 
 		else if (userName.contains("元以下")) {
 			Pattern pp = Pattern.compile(".*(\\d*).*");
@@ -181,11 +188,13 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 				addNotFilter(195 + "");
 				addNotFilter(997 + "");
 				addNotFilter(988 + "");
+				addNotFilter(999 + "");
 			}
 			filters2.add((g) -> g.getGid() != 196);
 			filters2.add((g) -> g.getGid() != 195);
 			filters2.add((g) -> g.getGid() != 988);
 			filters2.add((g) -> g.getGid() != 997);
+			filters2.add((g) -> g.getGid() != 999);
 			
 		} else {
 			String keyUser = giftRepository.getKeyUserByName(userName);
@@ -197,6 +206,7 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 			}
 			addFilter(uid);
 			filters2.add((g) -> userName.equals(g.getUserName()));
+			
 		}
 		init();
 		// givingDataSource.filters2.clear();
@@ -206,7 +216,7 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 		// System.out.println("Filter Ready");
 		// givingDataSource.start();
 		// System.out.println("working...");
-
+		//recordService.sendAll();
 		System.out.println("sorted");
 		webSocket.convertAndSend(WEB_SOCKET_PUBLISH_CHANNEL + "/update2", chartData.getChartData());
 		System.out.println(chartData.getChartData().getLabels());
@@ -221,6 +231,12 @@ public class TimeBasedCharts implements Listener<BoundaryWrapper<Long>>{
 		
 		return chartData.getChartData();
 	}
+
+//	@Override
+//	public void handle(Event<BoundaryWrapper<Long>> e) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 //	@Override
 //	public void handle(Event<BoundaryWrapper<Long>> e) {

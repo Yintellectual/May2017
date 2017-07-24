@@ -196,19 +196,25 @@ public abstract class GiftRepository implements Listener<Giving> {
 		case 947:
 			amount_in_cents = 1;
 			break;
+		case 975:
+			amount_in_cents = 1;
+			break;
 		case 997:
 			amount_in_cents = 5000;
 			break;
 		case 988:
 			amount_in_cents = 5000;
 			break;
-
+		case 999:
+			amount_in_cents = 20000;
+			break;
 		case 195:
 			amount_in_cents = 1000;
 			break;
 		case 196:
 			amount_in_cents = 5000;
 			break;
+			
 		default:
 			amount_in_cents = 0;
 			break;
@@ -284,7 +290,10 @@ public abstract class GiftRepository implements Listener<Giving> {
 			break;
 		case 947:
 			name = "狼爪手";
-			break;
+			break;		
+		case 975:
+				name = "吸星大法";
+				break;
 		case 988:
 			name = "猫耳火箭";
 			break;
@@ -296,6 +305,9 @@ public abstract class GiftRepository implements Listener<Giving> {
 			break;
 		case 196:
 			name = "火箭";
+			break;
+		case 999:
+			name = "超级火箭";
 			break;
 		default:
 			name = "礼物编号" + gid;
