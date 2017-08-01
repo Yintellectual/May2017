@@ -1,0 +1,5 @@
+AKIAIB2SK2F2FF5MIT5A TdOSvDo79MB/+xF/oZbnhgPHHcbmZmG1CLqGltOT
+
+
+cc:
+	db_encryption_key: rn9Dh9fqPUzMVy5JHId14EFHSUtwDjDj
